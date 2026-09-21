@@ -1,0 +1,88 @@
+name: Release Build & Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup --no-progress
+          echo "C:\Program Files (x86)\Inno Setup 6" >> $env:GITHUB_PATH
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Install Frontend Dependencies & Build SPA
+        working-directory: ./ui
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build Standalone Executable & Inno Installer
+        run: |
+          python build.py
+
+      - name: Compute Installer Checksum
+        id: checksum
+        shell: pwsh
+        run: |
+          $installerPath = "installer\output\JarvisAssistant_Setup.exe"
+          if (Test-Path $installerPath) {
+            $hash = (Get-FileHash $installerPath -Algorithm SHA256).Hash
+            echo "SHA256: $hash"
+            "INSTALLER_HASH=$hash" >> $env:GITHUB_ENV
+          } else {
+            Write-Error "Installer executable not found at $installerPath"
+            exit 1
+          }
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: installer/output/JarvisAssistant_Setup.exe
+          body: |
+            ## J.A.R.V.I.S. Windows 11 Assistant Release
+
+            ### Automated Build Information
+            - **Release Version**: `${{ github.ref_name }}`
+            - **Installer**: `JarvisAssistant_Setup.exe`
+            - **SHA256**: `${{ env.INSTALLER_HASH }}`
+
+            ### Installation Instructions
+            1. Download `JarvisAssistant_Setup.exe` below.
+            2. Run the installer and follow the setup wizard.
+            3. On first launch, the cinematic setup wizard will guide you through your AI mode, API keys, and voice persona!
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

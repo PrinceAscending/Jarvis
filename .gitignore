@@ -1,0 +1,82 @@
+# ==========================================
+# JARVIS AI Assistant — Git Ignore Rules
+# ==========================================
+
+# Operating System Files
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# PyInstaller & Build Output
+dist/
+build/
+*.manifest
+*.spec.bak
+
+# Inno Setup Output
+installer/output/
+*.iss.bak
+
+# Node.js & Vite Frontend
+ui/node_modules/
+ui/dist/
+ui/.vite/
+ui/coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Application Runtime Data & Local Storage
+local_data/
+*.db
+*.sqlite3
+recordings/
+logs/
+temp/
+updates/
+
+# Secrets & Local Configurations
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json

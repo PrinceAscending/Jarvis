@@ -97,7 +97,7 @@ def main():
         min_size=(440, 600),
         frameless=True,          # Sleek borderless window
         easy_drag=False,         # Controlled via CSS webkit-app-region: drag
-        background_color="#030508",
+        background_color="#0A0E17",
         on_top=always_on_top,
     )
     window_holder.append(window)

@@ -50,64 +50,64 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
   };
 
   return (
-    <div className="flex flex-col max-w-2xl mx-auto space-y-6 animate-fade-slide-in">
+    <div className="flex flex-col max-w-xl mx-auto space-y-5 animate-fade-in">
       <div className="text-center space-y-1">
-        <h2 className="text-xl md:text-2xl font-display font-bold text-zinc-100 tracking-wider uppercase">
-          Select AI Operational Mode
+        <h2 className="text-xl font-semibold text-text-bright tracking-tight">
+          Select AI operational mode
         </h2>
-        <p className="text-xs text-zinc-400 font-mono">
-          Run completely private on local hardware or leverage high-speed free cloud neural engines.
+        <p className="text-xs text-text-muted">
+          Run models locally on your PC or connect to free cloud providers.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
         {/* Local Mode Card */}
         <div
           onClick={() => handleSelectMode('local')}
-          className={`glass-panel p-5 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between relative group ${
+          className={`surface-card p-4 rounded-xl cursor-pointer transition-colors flex flex-col justify-between relative ${
             mode === 'local'
-              ? 'border-emerald-400/50 bg-emerald-950/20 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
-              : 'border-white/10 hover:border-white/20'
+              ? 'border-semantic-online/50 bg-surface-elevated'
+              : 'hover:border-surface-border/90'
           }`}
         >
           {mode === 'local' && (
-            <div className="absolute top-3 right-3 text-emerald-400">
-              <CheckCircle2 size={18} />
+            <div className="absolute top-3 right-3 text-semantic-online">
+              <CheckCircle2 size={16} />
             </div>
           )}
-          <div className="space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
-              <Server size={20} />
+          <div className="space-y-2">
+            <div className="w-8 h-8 rounded-lg bg-semantic-online/15 text-semantic-online flex items-center justify-center">
+              <Server size={17} />
             </div>
             <div>
-              <div className="text-sm font-display font-bold text-zinc-100 tracking-wide flex items-center gap-2">
-                Local Mode (Ollama)
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                  100% Offline
+              <div className="text-sm font-medium text-text-bright flex items-center gap-1.5">
+                Local (Ollama)
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-semantic-online/15 text-semantic-online">
+                  Offline
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
-                Zero internet required. Executes entirely on your local GPU/CPU with maximum privacy.
+              <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                Runs locally on your CPU/GPU with total privacy. Zero internet needed.
               </p>
             </div>
           </div>
 
           {/* Ollama Probe Status */}
-          <div className="mt-4 pt-3 border-t border-white/5">
-            <div className="flex items-center justify-between text-[11px] font-mono">
-              <span className="text-zinc-400">Ollama Status:</span>
-              <div className="flex items-center gap-1.5">
+          <div className="mt-4 pt-2.5 border-t border-surface-border/50 text-[11px]">
+            <div className="flex items-center justify-between">
+              <span className="text-text-muted">Ollama:</span>
+              <div className="flex items-center gap-1">
                 {checking ? (
-                  <span className="text-zinc-400 flex items-center gap-1">
-                    <RefreshCw size={11} className="animate-spin" /> Checking...
+                  <span className="text-text-muted flex items-center gap-1">
+                    <RefreshCw size={10} className="animate-spin" /> Checking...
                   </span>
                 ) : ollamaDetected ? (
-                  <span className="text-emerald-400 flex items-center gap-1">
-                    <CheckCircle2 size={12} /> Detected ({ollamaModels.length} models)
+                  <span className="text-semantic-online flex items-center gap-1">
+                    <CheckCircle2 size={11} /> Ready ({ollamaModels.length} models)
                   </span>
                 ) : (
-                  <span className="text-amber-400 flex items-center gap-1">
-                    <AlertCircle size={12} /> Not running
+                  <span className="text-warm flex items-center gap-1">
+                    <AlertCircle size={11} /> Not running
                   </span>
                 )}
                 <button
@@ -116,10 +116,10 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
                     e.stopPropagation();
                     checkOllama();
                   }}
-                  className="p-1 text-zinc-500 hover:text-zinc-200"
-                  title="Re-check Ollama"
+                  className="p-1 text-text-muted hover:text-text-bright"
+                  title="Refresh Ollama status"
                 >
-                  <RefreshCw size={11} />
+                  <RefreshCw size={10} />
                 </button>
               </div>
             </div>
@@ -129,54 +129,52 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
         {/* Online Cloud Mode Card */}
         <div
           onClick={() => handleSelectMode('online')}
-          className={`glass-panel p-5 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between relative group ${
+          className={`surface-card p-4 rounded-xl cursor-pointer transition-colors flex flex-col justify-between relative ${
             mode === 'online'
-              ? 'border-cyan-neon/50 bg-cyan-950/20 shadow-neon-cyan/20'
-              : 'border-white/10 hover:border-white/20'
+              ? 'border-signal/50 bg-surface-elevated'
+              : 'hover:border-surface-border/90'
           }`}
         >
           {mode === 'online' && (
-            <div className="absolute top-3 right-3 text-cyan-neon">
-              <CheckCircle2 size={18} />
+            <div className="absolute top-3 right-3 text-signal">
+              <CheckCircle2 size={16} />
             </div>
           )}
-          <div className="space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-neon/30 flex items-center justify-center text-cyan-neon">
-              <Cloud size={20} />
+          <div className="space-y-2">
+            <div className="w-8 h-8 rounded-lg bg-signal/15 text-signal flex items-center justify-center">
+              <Cloud size={17} />
             </div>
             <div>
-              <div className="text-sm font-display font-bold text-zinc-100 tracking-wide flex items-center gap-2">
-                Online Cloud Mode
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300">
-                  Free Available
+              <div className="text-sm font-medium text-text-bright flex items-center gap-1.5">
+                Cloud providers
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-signal/15 text-signal">
+                  Free tiers
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
-                Connect to Google Gemini, Groq, or OpenRouter for lightning-fast reasoning and planning.
+              <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                Google Gemini, Groq, or OpenRouter for fast inference and complex reasoning.
               </p>
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/5">
-            <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
-              <span>Providers:</span>
-              <span className="text-cyan-neon">Gemini, Groq, OpenRouter</span>
-            </div>
+          <div className="mt-4 pt-2.5 border-t border-surface-border/50 text-[11px] text-text-muted flex items-center justify-between">
+            <span>Supported:</span>
+            <span className="text-text">Gemini, Groq, OpenRouter</span>
           </div>
         </div>
       </div>
 
       {/* Online Provider Selection */}
       {mode === 'online' && (
-        <div className="space-y-2 pt-2">
-          <label className="block text-xs font-mono text-zinc-300">
-            Choose Preferred Cloud Neural Provider:
+        <div className="space-y-2 pt-1">
+          <label className="block text-xs text-text-muted">
+            Select cloud provider:
           </label>
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 gap-2">
             {[
-              { id: 'gemini', name: 'Google Gemini', tag: 'Recommended Free', speed: 'High' },
-              { id: 'groq', name: 'Groq Cloud', tag: 'Ultra-Fast Free', speed: '500 t/s' },
-              { id: 'openrouter', name: 'OpenRouter', tag: 'Free Models Hub', speed: 'Fast' },
+              { id: 'gemini', name: 'Gemini', tag: 'Recommended free' },
+              { id: 'groq', name: 'Groq', tag: 'Fast free' },
+              { id: 'openrouter', name: 'OpenRouter', tag: 'Free hub' },
             ].map((p) => {
               const active = selectedProvider === p.id;
               return (
@@ -184,14 +182,14 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
                   key={p.id}
                   type="button"
                   onClick={() => setSelectedProvider(p.id)}
-                  className={`p-3 rounded-xl border text-left transition-all ${
+                  className={`p-2.5 rounded-lg border text-left transition-colors ${
                     active
-                      ? 'border-cyan-neon/50 bg-cyan-500/10 text-cyan-neon font-semibold'
-                      : 'border-white/10 text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
+                      ? 'border-signal bg-signal/10 text-text-bright'
+                      : 'border-surface-border text-text-muted hover:text-text hover:bg-surface-elevated/40'
                   }`}
                 >
-                  <div className="text-xs font-mono">{p.name}</div>
-                  <div className="text-[10px] text-zinc-400 mt-0.5">{p.tag}</div>
+                  <div className="text-xs font-medium">{p.name}</div>
+                  <div className="text-[10px] text-text-muted mt-0.5">{p.tag}</div>
                 </button>
               );
             })}
@@ -200,23 +198,23 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
       )}
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex items-center justify-between pt-3">
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/20 text-zinc-400 hover:text-zinc-200 font-mono text-xs transition-colors"
+          className="flex items-center gap-1 px-3.5 py-2 rounded-lg border border-surface-border hover:bg-surface text-text-muted text-xs transition-colors"
         >
-          <ArrowLeft size={14} />
+          <ArrowLeft size={13} />
           <span>Back</span>
         </button>
 
         <button
           type="button"
           onClick={onNext}
-          className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-obsidian-950 font-display font-bold text-xs tracking-wider uppercase transition-all shadow-neon-cyan"
+          className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-signal hover:bg-signal-hover text-white text-xs font-medium transition-colors"
         >
-          <span>Configure Provider</span>
-          <ArrowRight size={14} />
+          <span>Next</span>
+          <ArrowRight size={13} />
         </button>
       </div>
     </div>

@@ -18,7 +18,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
   const [isBooting, setIsBooting] = useState(false);
 
   // Form State
-  const [assistantName, setAssistantName] = useState('JARVIS');
+  const [assistantName, setAssistantName] = useState('Jarvis');
   const [userName, setUserName] = useState('Sir');
   const [aiMode, setAiMode] = useState<'local' | 'online'>('online');
   const [activeProvider, setActiveProvider] = useState('gemini');
@@ -35,12 +35,12 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
   const [proactiveEnabled, setProactiveEnabled] = useState(true);
 
   const STEP_TITLES = [
-    'Identity',
-    'AI Mode',
-    'Credentials',
-    'Voice Persona',
-    'Guardrails',
-    'Activation',
+    'Welcome',
+    'AI engine',
+    'API key',
+    'Voice',
+    'Permissions',
+    'Review',
   ];
 
   const handleCompleteSetup = async () => {
@@ -67,16 +67,16 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
       } else {
         useToastStore.getState().addToast({
           type: 'error',
-          title: 'Setup Failed',
-          message: 'Unable to commit configuration parameters.',
+          title: 'Setup error',
+          message: 'Unable to save configuration parameters.',
         });
         setIsSubmitting(false);
       }
     } catch (e: any) {
       useToastStore.getState().addToast({
         type: 'error',
-        title: 'Connection Error',
-        message: e.message || 'Cannot reach JARVIS backend service.',
+        title: 'Connection error',
+        message: e.message || 'Cannot reach Jarvis backend.',
       });
       setIsSubmitting(false);
     }
@@ -87,30 +87,27 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-obsidian-950 flex flex-col justify-between p-6 md:p-10 cyber-grid overflow-y-auto select-none">
-      {/* Dynamic Background Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-
+    <div className="fixed inset-0 z-50 bg-void flex flex-col justify-between p-6 md:p-10 overflow-y-auto select-none">
       {/* Progress Steps Header */}
-      <div className="max-w-2xl mx-auto w-full">
-        <div className="flex items-center justify-between gap-1 mb-2">
+      <div className="max-w-xl mx-auto w-full">
+        <div className="flex items-center justify-between gap-2 mb-2">
           {STEP_TITLES.map((title, idx) => {
             const isDone = idx < step;
             const isCurr = idx === step;
             return (
-              <div key={title} className="flex-1 flex flex-col items-center gap-1">
+              <div key={title} className="flex-1 flex flex-col items-center gap-1.5">
                 <div
                   className={`h-1 w-full rounded-full transition-all ${
                     isDone
-                      ? 'bg-cyan-neon shadow-[0_0_10px_rgba(0,240,255,0.5)]'
+                      ? 'bg-signal'
                       : isCurr
-                      ? 'bg-cyan-500/60'
-                      : 'bg-white/10'
+                      ? 'bg-signal/70'
+                      : 'bg-surface-elevated'
                   }`}
                 />
                 <span
-                  className={`text-[9px] font-mono tracking-wider hidden sm:block ${
-                    isCurr ? 'text-cyan-neon font-bold' : 'text-zinc-500'
+                  className={`text-[10px] hidden sm:block ${
+                    isCurr ? 'text-text-bright font-medium' : 'text-text-muted'
                   }`}
                 >
                   {title}
@@ -202,9 +199,9 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         )}
       </div>
 
-      {/* Footer Branding */}
-      <div className="text-center font-mono text-[10px] text-zinc-600 tracking-wider">
-        J.A.R.V.I.S. WINDOWS 11 INTEGRATED PERSONAL INTELLIGENCE
+      {/* Footer Note */}
+      <div className="text-center text-[11px] text-text-muted/60">
+        Jarvis for Windows 11
       </div>
     </div>
   );

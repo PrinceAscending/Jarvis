@@ -3,9 +3,7 @@ import {
   BrainCircuit,
   Plus,
   Trash2,
-  Bookmark,
   Tag,
-  Sparkles,
 } from 'lucide-react';
 
 export const MemoryView: React.FC = () => {
@@ -58,55 +56,55 @@ export const MemoryView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 h-full overflow-y-auto p-6 md:p-8 space-y-6 cyber-grid select-none">
+    <div className="flex-1 h-full overflow-y-auto p-6 md:p-8 space-y-6 select-none bg-void">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-display font-bold tracking-wider text-zinc-100 uppercase flex items-center gap-2">
-            <BrainCircuit className="text-cyan-neon" size={20} />
-            Persistent Memory Core
+          <h2 className="text-lg font-semibold tracking-tight text-text-bright flex items-center gap-2">
+            <BrainCircuit className="text-signal" size={18} />
+            Memory
           </h2>
-          <p className="text-xs font-mono text-zinc-400 mt-0.5">
-            Learned knowledge, user preferences, and historical facts retained across sessions
+          <p className="text-xs text-text-muted mt-0.5">
+            Knowledge and preferences Jarvis retains across sessions
           </p>
         </div>
 
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-obsidian-950 text-xs font-semibold font-mono transition-all shadow-neon-cyan"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-signal hover:bg-signal-hover text-white text-xs font-medium transition-colors"
         >
           <Plus size={14} />
-          <span>STORE KNOWLEDGE</span>
+          <span>Add memory</span>
         </button>
       </div>
 
       {/* Add Memory Drawer */}
       {isAdding && (
-        <form onSubmit={handleAdd} className="glass-panel p-5 rounded-2xl border-cyan-neon/30 space-y-4">
-          <h3 className="text-xs font-mono tracking-wider text-cyan-neon uppercase">
-            Inject New Memory Record
+        <form onSubmit={handleAdd} className="surface-card p-5 rounded-xl border-surface-border space-y-4 animate-fade-in">
+          <h3 className="text-xs font-medium text-text-bright">
+            Add a memory
           </h3>
 
           <div>
             <textarea
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
-              placeholder="e.g. 'User prefers code examples written in TypeScript with strict null checks.'"
-              className="w-full h-24 bg-white/[0.03] border border-white/10 rounded-xl p-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-cyan-neon/50 font-sans"
+              placeholder="e.g. 'User prefers concise summaries with action points.'"
+              className="w-full h-24 bg-surface-well border border-surface-border rounded-lg p-3 text-sm text-text-bright placeholder-text-muted outline-none focus:border-signal/50 font-sans"
             />
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-zinc-400">Category:</span>
+              <span className="text-xs text-text-muted">Category:</span>
               <select
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
-                className="bg-obsidian-900 border border-white/10 rounded-lg px-2.5 py-1 text-xs text-zinc-200 outline-none font-mono"
+                className="bg-surface border border-surface-border rounded-md px-2.5 py-1 text-xs text-text outline-none font-sans"
               >
-                <option value="preferences">User Preferences</option>
-                <option value="projects">Projects & Tasks</option>
-                <option value="facts">Important Facts</option>
+                <option value="preferences">User preferences</option>
+                <option value="projects">Projects & tasks</option>
+                <option value="facts">Important facts</option>
                 <option value="general">General</option>
               </select>
             </div>
@@ -115,13 +113,13 @@ export const MemoryView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsAdding(false)}
-                className="px-3 py-1.5 rounded-lg hover:bg-white/5 text-zinc-400 text-xs font-mono"
+                className="px-3 py-1.5 rounded-lg hover:bg-surface-elevated text-text-muted text-xs transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 rounded-lg bg-cyan-500 text-obsidian-950 font-semibold text-xs font-mono hover:bg-cyan-400 transition-all"
+                className="px-4 py-1.5 rounded-lg bg-signal text-white font-medium text-xs hover:bg-signal-hover transition-colors"
               >
                 Save
               </button>
@@ -135,34 +133,39 @@ export const MemoryView: React.FC = () => {
         {memories.map((m) => (
           <div
             key={m.id}
-            className="glass-panel p-4 rounded-xl border-white/10 hover:border-cyan-neon/30 transition-all group relative flex flex-col justify-between"
+            className="surface-card p-4 rounded-xl hover:border-surface-border/90 transition-colors group relative flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-neon/20 text-[10px] font-mono text-cyan-neon flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-md bg-surface-elevated border border-surface-border text-[11px] text-text-muted flex items-center gap-1">
                   <Tag size={10} />
                   {m.category}
                 </span>
 
                 <button
                   onClick={() => handleDelete(m.id)}
-                  className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-rose-500/20 text-zinc-500 hover:text-rose-400 transition-all"
+                  title="Delete memory"
+                  className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-semantic-error/15 text-text-muted hover:text-semantic-error transition-all"
                 >
                   <Trash2 size={13} />
                 </button>
               </div>
 
-              <p className="text-sm text-zinc-200 leading-relaxed font-sans select-text">
+              <p className="text-sm text-text leading-relaxed font-sans select-text">
                 {m.content}
               </p>
             </div>
 
-            <div className="mt-4 pt-2 border-t border-white/[0.04] text-[9px] font-mono text-zinc-500 flex items-center justify-between">
-              <span>ID: {m.id}</span>
+            <div className="mt-4 pt-2 border-t border-surface-border/50 text-[10px] text-text-muted/60 flex items-center justify-end">
               <span>{m.created_at}</span>
             </div>
           </div>
         ))}
+        {memories.length === 0 && (
+          <div className="col-span-2 py-12 text-center text-text-muted text-xs surface-card rounded-xl">
+            No memories stored yet. Add memories to give Jarvis ongoing context about your preferences.
+          </div>
+        )}
       </div>
     </div>
   );

@@ -20,11 +20,11 @@ export const APIKeyStep: React.FC<APIKeyStepProps> = ({
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const keyLinks: Record<string, { label: string; url: string }> = {
-    gemini: { label: 'Get Free Gemini Key (Google AI Studio)', url: 'https://aistudio.google.com/app/apikey' },
-    groq: { label: 'Get Free Groq Key (Groq Console)', url: 'https://console.groq.com/keys' },
-    openrouter: { label: 'Get OpenRouter Key (Free Models Available)', url: 'https://openrouter.ai/keys' },
-    openai: { label: 'OpenAI API Keys', url: 'https://platform.openai.com/api-keys' },
-    anthropic: { label: 'Anthropic Console', url: 'https://console.anthropic.com/' },
+    gemini: { label: 'Get free Gemini key', url: 'https://aistudio.google.com/app/apikey' },
+    groq: { label: 'Get free Groq key', url: 'https://console.groq.com/keys' },
+    openrouter: { label: 'Get OpenRouter key', url: 'https://openrouter.ai/keys' },
+    openai: { label: 'OpenAI API keys', url: 'https://platform.openai.com/api-keys' },
+    anthropic: { label: 'Anthropic console', url: 'https://console.anthropic.com/' },
   };
 
   const isLocal = provider === 'ollama';
@@ -53,24 +53,24 @@ export const APIKeyStep: React.FC<APIKeyStepProps> = ({
   };
 
   return (
-    <div className="flex flex-col max-w-xl mx-auto space-y-6 animate-fade-slide-in">
+    <div className="flex flex-col max-w-md mx-auto space-y-5 animate-fade-in">
       <div className="text-center space-y-1">
-        <h2 className="text-xl md:text-2xl font-display font-bold text-zinc-100 tracking-wider uppercase">
-          {provider.toUpperCase()} Configuration
+        <h2 className="text-xl font-semibold text-text-bright tracking-tight capitalize">
+          {provider} configuration
         </h2>
-        <p className="text-xs text-zinc-400 font-mono">
+        <p className="text-xs text-text-muted">
           {isLocal
             ? 'Verify Ollama local endpoint and model identifier'
-            : 'Enter your credentials to link the neural engine'}
+            : 'Enter your API key to connect the model'}
         </p>
       </div>
 
-      <div className="glass-panel p-6 rounded-2xl border-white/10 space-y-4">
+      <div className="surface-card p-5 rounded-xl space-y-3.5">
         {isLocal ? (
           <div>
-            <label className="block text-xs font-mono text-zinc-300 mb-1.5 flex items-center gap-1.5">
-              <Server size={13} className="text-emerald-400" />
-              Ollama Server URL
+            <label className="block text-xs text-text-muted mb-1 flex items-center gap-1.5">
+              <Server size={13} className="text-semantic-online" />
+              Ollama server URL
             </label>
             <input
               type="text"
@@ -79,22 +79,22 @@ export const APIKeyStep: React.FC<APIKeyStepProps> = ({
                 setProviderConfig({ ...providerConfig, base_url: e.target.value })
               }
               placeholder="http://localhost:11434"
-              className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-neon/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 font-mono outline-none"
+              className="w-full bg-surface-well border border-surface-border focus:border-signal/60 rounded-lg px-3.5 py-2 text-sm text-text-bright font-mono outline-none"
             />
           </div>
         ) : (
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-mono text-zinc-300 flex items-center gap-1.5">
-                <Key size={13} className="text-cyan-neon" />
-                API Key
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs text-text-muted flex items-center gap-1.5">
+                <Key size={13} className="text-signal" />
+                API key
               </label>
               {keyLinks[provider] && (
                 <a
                   href={keyLinks[provider].url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] text-cyan-neon hover:underline font-mono flex items-center gap-1"
+                  className="text-[11px] text-signal hover:underline flex items-center gap-1"
                 >
                   <span>{keyLinks[provider].label}</span>
                   <ExternalLink size={10} />
@@ -107,16 +107,16 @@ export const APIKeyStep: React.FC<APIKeyStepProps> = ({
               onChange={(e) =>
                 setProviderConfig({ ...providerConfig, api_key: e.target.value })
               }
-              placeholder={`Paste your ${provider.toUpperCase()} API key...`}
-              className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-neon/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 font-mono outline-none"
+              placeholder="Paste API key..."
+              className="w-full bg-surface-well border border-surface-border focus:border-signal/60 rounded-lg px-3.5 py-2 text-sm text-text-bright font-mono outline-none"
             />
           </div>
         )}
 
-        {/* Model ID */}
+        {/* Model Identifier */}
         <div>
-          <label className="block text-xs font-mono text-zinc-300 mb-1.5">
-            Model Identifier
+          <label className="block text-xs text-text-muted mb-1">
+            Model identifier
           </label>
           <input
             type="text"
@@ -133,45 +133,45 @@ export const APIKeyStep: React.FC<APIKeyStepProps> = ({
                 ? 'llama3:latest'
                 : 'model identifier...'
             }
-            className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-neon/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 font-mono outline-none"
+            className="w-full bg-surface-well border border-surface-border focus:border-signal/60 rounded-lg px-3.5 py-2 text-sm text-text-bright font-mono outline-none"
           />
         </div>
 
-        {/* Live Test Connection Button */}
-        <div className="pt-2">
+        {/* Test Connection Button */}
+        <div className="pt-1">
           <button
             type="button"
             onClick={handleTestConnection}
             disabled={testing || (!isLocal && !providerConfig.api_key)}
-            className="w-full py-2.5 px-4 rounded-xl border border-cyan-neon/30 hover:border-cyan-neon/60 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-neon font-mono text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-40"
+            className="w-full py-2 px-3 rounded-lg border border-surface-border hover:bg-surface-elevated text-text text-xs flex items-center justify-center gap-1.5 transition-colors disabled:opacity-40"
           >
             {testing ? (
               <>
-                <RefreshCw size={13} className="animate-spin" />
-                <span>Verifying neural connection...</span>
+                <RefreshCw size={12} className="animate-spin text-signal" />
+                <span>Verifying connection...</span>
               </>
             ) : (
               <>
-                <CheckCircle2 size={13} />
-                <span>Test Connection</span>
+                <CheckCircle2 size={12} />
+                <span>Test connection</span>
               </>
             )}
           </button>
 
           {testResult && (
             <div
-              className={`mt-3 p-3 rounded-xl border text-xs font-mono flex items-start gap-2 ${
+              className={`mt-2.5 p-2.5 rounded-lg border text-xs flex items-start gap-2 ${
                 testResult.success
-                  ? 'border-emerald-500/40 bg-emerald-950/20 text-emerald-300'
-                  : 'border-rose-500/40 bg-rose-950/20 text-rose-300'
+                  ? 'border-semantic-online/30 bg-semantic-online/10 text-semantic-online'
+                  : 'border-semantic-error/30 bg-semantic-error/10 text-semantic-error'
               }`}
             >
               {testResult.success ? (
-                <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle2 size={14} className="shrink-0 mt-0.5" />
               ) : (
-                <AlertCircle size={15} className="text-rose-400 shrink-0 mt-0.5" />
+                <AlertCircle size={14} className="shrink-0 mt-0.5" />
               )}
-              <div className="flex-1">{testResult.message}</div>
+              <div className="flex-1 text-[11px]">{testResult.message}</div>
             </div>
           )}
         </div>
@@ -182,19 +182,19 @@ export const APIKeyStep: React.FC<APIKeyStepProps> = ({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/20 text-zinc-400 hover:text-zinc-200 font-mono text-xs transition-colors"
+          className="flex items-center gap-1 px-3.5 py-2 rounded-lg border border-surface-border hover:bg-surface text-text-muted text-xs transition-colors"
         >
-          <ArrowLeft size={14} />
+          <ArrowLeft size={13} />
           <span>Back</span>
         </button>
 
         <button
           type="button"
           onClick={onNext}
-          className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-obsidian-950 font-display font-bold text-xs tracking-wider uppercase transition-all shadow-neon-cyan"
+          className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-signal hover:bg-signal-hover text-white text-xs font-medium transition-colors"
         >
-          <span>Voice Persona</span>
-          <ArrowRight size={14} />
+          <span>Next</span>
+          <ArrowRight size={13} />
         </button>
       </div>
     </div>

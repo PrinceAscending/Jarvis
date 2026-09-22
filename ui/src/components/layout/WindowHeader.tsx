@@ -1,5 +1,5 @@
 import React from 'react';
-import { Minus, X, Pin, Activity, Sparkles, AlertCircle } from 'lucide-react';
+import { Minus, X, Pin, Sparkles, AlertCircle } from 'lucide-react';
 import { pyBridge } from '@/lib/pywebview';
 import { useAppStore } from '@/store/useAppStore';
 
@@ -12,7 +12,6 @@ export const WindowHeader: React.FC = () => {
     updateAvailable,
     updateInfo,
     setActiveTab,
-    activeProvider,
   } = useAppStore();
 
   const togglePin = async () => {
@@ -22,76 +21,67 @@ export const WindowHeader: React.FC = () => {
   };
 
   const statusLabel = {
-    idle: 'SYSTEM READY',
-    listening: 'AUDIO INGEST',
-    thinking: 'NEURAL PROCESSING',
-    tool_executing: 'EXECUTING WORKFLOW',
-    speaking: 'TRANSMITTING',
+    idle: 'System ready',
+    listening: 'Listening',
+    thinking: 'Processing',
+    tool_executing: 'Running workflow',
+    speaking: 'Speaking',
   }[status];
 
   return (
-    <header className="h-10 w-full flex items-center justify-between px-4 border-b border-white/[0.06] bg-obsidian-950/80 backdrop-blur-md window-drag select-none z-50">
+    <header className="h-9 w-full flex items-center justify-between px-3.5 border-b border-surface-border bg-void/95 window-drag select-none z-50">
       {/* Brand & Connection status */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
         <div className="flex items-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
-            <span
-              className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                connected ? 'bg-cyan-neon' : 'bg-rose-500'
-              }`}
-            />
-            <span
-              className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                connected ? 'bg-cyan-neon' : 'bg-rose-500'
-              }`}
-            />
+          <span
+            className={`w-2 h-2 rounded-full transition-colors ${
+              connected ? 'bg-semantic-online' : 'bg-semantic-error'
+            }`}
+          />
+          <span className="font-sans font-semibold text-xs tracking-tight text-text-bright">
+            Jarvis
           </span>
-          <span className="font-display font-bold text-xs tracking-widest text-zinc-100 uppercase">
-            J.A.R.V.I.S.
-          </span>
-          <span className="text-[10px] text-zinc-500 font-mono tracking-tighter">v4.2.0</span>
         </div>
 
-        <div className="h-3 w-px bg-white/10" />
+        <div className="h-3 w-px bg-white/[0.08]" />
 
-        {/* Live Status Badge */}
+        {/* Status indicator */}
         {connected ? (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
-            <Activity size={10} className="text-cyan-neon animate-pulse" />
-            <span className="font-mono text-[9px] tracking-wider text-cyan-neon font-medium">
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-surface border border-surface-border">
+            <span className="text-[11px] font-normal text-text-muted">
               {statusLabel}
             </span>
           </div>
         ) : (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400">
-            <AlertCircle size={10} className="animate-spin" />
-            <span className="font-mono text-[9px] tracking-wider font-medium">
-              CONNECTING...
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-semantic-error/10 border border-semantic-error/20 text-semantic-error">
+            <AlertCircle size={11} className="animate-spin" />
+            <span className="text-[11px] font-normal">
+              Connecting...
             </span>
           </div>
         )}
 
-        {/* Update Available Badge */}
+        {/* Update notification pill */}
         {updateAvailable && (
           <button
             onClick={() => setActiveTab('settings')}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-neon/40 text-cyan-neon font-mono text-[9px] animate-pulse hover:bg-cyan-500/30 transition-colors window-no-drag"
+            className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-signal/15 border border-signal/30 text-signal hover:bg-signal/25 text-[11px] font-medium transition-colors window-no-drag"
           >
-            <Sparkles size={10} />
-            <span>UPDATE {updateInfo?.latest_version || 'READY'}</span>
+            <Sparkles size={11} />
+            <span>Update {updateInfo?.latest_version ? `v${updateInfo.latest_version}` : 'ready'}</span>
           </button>
         )}
       </div>
 
-      {/* Windows Controls (No drag) */}
-      <div className="flex items-center gap-1 window-no-drag">
+      {/* Window Controls */}
+      <div className="flex items-center gap-0.5 window-no-drag">
         <button
           onClick={togglePin}
-          title={alwaysOnTop ? 'Disable Always on Top' : 'Pin Always on Top'}
-          className={`p-1.5 rounded transition-all ${
+          title={alwaysOnTop ? 'Unpin window' : 'Keep on top'}
+          className={`p-1.5 rounded-md transition-colors ${
             alwaysOnTop
-              ? 'text-cyan-neon bg-cyan-dim'
-              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+              ? 'text-signal bg-signal/15'
+              : 'text-text-muted hover:text-text-bright hover:bg-surface'
           }`}
         >
           <Pin size={13} className={alwaysOnTop ? 'rotate-45' : ''} />
@@ -99,16 +89,16 @@ export const WindowHeader: React.FC = () => {
 
         <button
           onClick={() => pyBridge.minimize()}
-          title="Minimize Window"
-          className="p-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-white/5 rounded transition-colors"
+          title="Minimize"
+          className="p-1.5 text-text-muted hover:text-text-bright hover:bg-surface rounded-md transition-colors"
         >
           <Minus size={13} />
         </button>
 
         <button
           onClick={() => pyBridge.close()}
-          title="Close Window"
-          className="p-1.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
+          title="Close"
+          className="p-1.5 text-text-muted hover:text-semantic-error hover:bg-semantic-error/10 rounded-md transition-colors"
         >
           <X size={13} />
         </button>

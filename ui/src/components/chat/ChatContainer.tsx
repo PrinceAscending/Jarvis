@@ -5,14 +5,7 @@ import {
   MicOff,
   Square,
   Wrench,
-  CheckCircle2,
-  AlertCircle,
-  Terminal,
-  Sparkles,
-  Bot,
-  User,
   Trash2,
-  Cpu,
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { AudioVisualizerOrb } from '@/components/audio/AudioVisualizerOrb';
@@ -77,37 +70,42 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   };
 
   const SUGGESTIONS = [
-    'Audit system health and memory',
+    'How is my system performing?',
     'Organize my Downloads folder',
-    'List top running processes',
-    'Search the web for latest AI news',
+    'Summarize recent technology news',
   ];
 
+  const greetingTime = (() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return 'Good morning';
+    if (hour >= 12 && hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  })();
+
   return (
-    <div className="flex-1 h-full flex flex-col justify-between overflow-hidden bg-obsidian-950/40 relative cyber-grid animate-fade-slide-in">
+    <div className="flex-1 h-full flex flex-col justify-between overflow-hidden bg-void relative animate-fade-in">
       {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-5">
         {/* Arc Reactor Center Presence if messages are few */}
-        {messages.length <= 2 && (
-          <div className="flex flex-col items-center justify-center my-6 text-center select-none animate-fade-slide-in">
-            <AudioVisualizerOrb status={status} size={220} />
-            <h2 className="text-xl font-display font-bold tracking-widest text-zinc-100 mt-4 uppercase">
-              J.A.R.V.I.S.
+        {messages.length <= 1 && (
+          <div className="flex flex-col items-center justify-center my-6 text-center select-none animate-fade-in">
+            <AudioVisualizerOrb status={status} size={200} />
+            <h2 className="text-xl font-medium tracking-tight text-text-bright mt-4">
+              {greetingTime}
             </h2>
-            <p className="text-xs text-zinc-400 font-mono max-w-sm mt-1">
-              Autonomous Windows 11 Personal Intelligence Environment
+            <p className="text-xs text-text-muted max-w-sm mt-1">
+              Jarvis is ready to assist with system control, tasks, and questions.
             </p>
 
             {/* Quick Suggestions Chips */}
-            <div className="flex flex-wrap justify-center gap-2 mt-6 max-w-lg">
+            <div className="flex flex-wrap justify-center gap-2 mt-5 max-w-lg">
               {SUGGESTIONS.map((s, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSuggestionClick(s)}
-                  className="px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-neon/40 text-zinc-300 hover:text-cyan-neon text-xs transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-lg bg-surface hover:bg-surface-elevated border border-surface-border text-text hover:text-text-bright text-xs transition-colors"
                 >
-                  <Sparkles size={11} className="text-cyan-neon" />
-                  <span>{s}</span>
+                  {s}
                 </button>
               ))}
             </div>
@@ -125,92 +123,62 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
           return (
             <div
               key={msg.id}
-              className={`flex gap-3.5 max-w-3xl animate-fade-slide-in ${
-                isUser ? 'ml-auto flex-row-reverse' : 'mr-auto'
+              className={`flex flex-col max-w-2xl animate-fade-in ${
+                isUser ? 'ml-auto items-end' : 'mr-auto items-start'
               }`}
             >
-              {/* Avatar Icon */}
               <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
+                className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                   isUser
-                    ? 'bg-zinc-800 border-white/20 text-zinc-200'
-                    : isAssistant
-                    ? 'bg-cyan-500/10 border-cyan-neon/30 text-cyan-neon shadow-[0_0_10px_rgba(0,240,255,0.2)]'
-                    : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                    ? 'bg-signal/15 text-text-bright border border-signal/30 rounded-tr-sm'
+                    : 'bg-surface text-text border border-surface-border rounded-tl-sm'
                 }`}
               >
-                {isUser ? <User size={15} /> : <Bot size={15} />}
+                {isAssistant ? (
+                  <MarkdownRenderer content={msg.content} />
+                ) : (
+                  <div className="whitespace-pre-wrap font-sans select-text">
+                    {msg.content}
+                  </div>
+                )}
+
+                {msg.isStreaming && (
+                  <span className="inline-block w-1.5 h-3.5 ml-1 bg-signal animate-pulse align-middle" />
+                )}
               </div>
 
-              {/* Message Content Bubble */}
-              <div
-                className={`flex flex-col ${
-                  isUser ? 'items-end' : 'items-start'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-1 px-1">
-                  <span className="text-[10px] font-mono tracking-wider text-zinc-400 uppercase">
-                    {isUser ? 'OPERATOR' : 'J.A.R.V.I.S.'}
-                  </span>
-                  <span className="text-[9px] font-mono text-zinc-600">
-                    {msg.timestamp}
-                  </span>
-                </div>
-
-                <div
-                  className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                    isUser
-                      ? 'bg-cyan-500/15 text-zinc-100 border border-cyan-neon/20 rounded-tr-sm'
-                      : isAssistant
-                      ? 'glass-panel text-zinc-200 border-white/10 rounded-tl-sm shadow-glass-edge'
-                      : 'bg-amber-950/30 text-amber-200 border border-amber-500/20'
-                  }`}
-                >
-                  {isAssistant ? (
-                    <MarkdownRenderer content={msg.content} />
-                  ) : (
-                    <div className="whitespace-pre-wrap font-sans select-text">
-                      {msg.content}
-                    </div>
-                  )}
-
-                  {msg.isStreaming && (
-                    <span className="inline-block w-2 h-4 ml-1 bg-cyan-neon animate-pulse align-middle" />
-                  )}
-                </div>
-              </div>
+              <span className="text-[10px] text-text-muted/60 mt-1 px-1">
+                {msg.timestamp}
+              </span>
             </div>
           );
         })}
 
-        {/* Live Active Tool Execution Card */}
+        {/* Live Active Tool Execution Badge */}
         {currentToolEvent && currentToolEvent.status === 'running' && (
-          <div className="max-w-md mx-auto p-3.5 rounded-xl bg-obsidian-900/90 border border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.15)] flex items-center gap-3 animate-fade-slide-in">
-            <div className="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
-              <Wrench size={14} className="text-amber-400 animate-spin" />
+          <div className="max-w-md mx-auto p-2.5 rounded-lg bg-surface border border-warm/30 flex items-center gap-3 animate-fade-in">
+            <div className="w-6 h-6 rounded-md bg-warm/15 border border-warm/30 flex items-center justify-center shrink-0">
+              <Wrench size={13} className="text-warm" />
             </div>
             <div className="flex-1 overflow-hidden">
-              <div className="text-xs font-mono font-semibold text-amber-300">
-                EXECUTING: {currentToolEvent.name}
+              <div className="text-xs font-mono font-medium text-warm">
+                Running: {currentToolEvent.name}
               </div>
-              <div className="text-[10px] font-mono text-zinc-400 truncate">
+              <div className="text-[10px] font-mono text-text-muted truncate">
                 {JSON.stringify(currentToolEvent.arguments || {})}
               </div>
             </div>
           </div>
         )}
 
-        {/* Neural Processing Typing Indicator */}
+        {/* Thinking Indicator */}
         {status === 'thinking' && !currentToolEvent && (
-          <div className="flex items-center gap-3 max-w-sm mr-auto animate-fade-slide-in">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.2)]">
-              <Cpu size={15} className="animate-spin" />
-            </div>
-            <div className="glass-panel px-4 py-2.5 rounded-2xl border-white/10 rounded-tl-sm flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce" />
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce [animation-delay:0.2s]" />
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce [animation-delay:0.4s]" />
-              <span className="text-xs font-mono text-violet-300 ml-2">Neural synthesis...</span>
+          <div className="flex items-center gap-2 max-w-sm mr-auto animate-fade-in">
+            <div className="bg-surface px-3 py-2 rounded-xl border border-surface-border rounded-tl-sm flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-semantic-thinking animate-bounce" />
+              <span className="w-1.5 h-1.5 rounded-full bg-semantic-thinking animate-bounce [animation-delay:0.2s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-semantic-thinking animate-bounce [animation-delay:0.4s]" />
+              <span className="text-xs text-text-muted ml-2">Thinking...</span>
             </div>
           </div>
         )}
@@ -219,16 +187,16 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
       </div>
 
       {/* Input Console Bar */}
-      <div className="p-4 border-t border-white/[0.06] bg-obsidian-950/90 backdrop-blur-xl z-20">
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex items-end gap-2">
+      <div className="p-3 border-t border-surface-border bg-void/90 select-none z-20">
+        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex items-end gap-2">
           {/* Clear Button */}
           <button
             type="button"
             onClick={clearMessages}
-            title="Clear Chat History"
-            className="p-2.5 text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-xl transition-colors shrink-0 mb-0.5"
+            title="Clear chat"
+            className="p-2 text-text-muted hover:text-text-bright hover:bg-surface rounded-lg transition-colors shrink-0 mb-0.5"
           >
-            <Trash2 size={16} />
+            <Trash2 size={15} />
           </button>
 
           {/* Multi-line Auto-expanding Textarea */}
@@ -239,17 +207,17 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Give a command or ask JARVIS... (Enter to send, Shift+Enter for newline)"
-              className="w-full bg-white/[0.03] hover:bg-white/[0.05] focus:bg-white/[0.07] border border-white/10 focus:border-cyan-neon/50 rounded-xl px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 outline-none transition-all font-sans pr-10 shadow-inner resize-none min-h-[42px] max-h-[120px] leading-relaxed"
+              placeholder="Message Jarvis..."
+              className="w-full bg-surface hover:bg-surface-elevated focus:bg-surface-elevated border border-surface-border focus:border-signal/50 rounded-xl px-3.5 py-2.5 text-sm text-text-bright placeholder-text-muted outline-none transition-colors font-sans pr-9 resize-none min-h-[40px] max-h-[120px] leading-relaxed"
             />
             {status !== 'idle' && (
               <button
                 type="button"
                 onClick={onInterrupt}
-                title="Silence / Stop Speech"
-                className="absolute right-3 bottom-2.5 p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 transition-colors"
+                title="Stop response"
+                className="absolute right-2.5 bottom-2 p-1.5 rounded-md bg-semantic-error/20 hover:bg-semantic-error/30 text-semantic-error transition-colors"
               >
-                <Square size={13} className="fill-rose-400" />
+                <Square size={12} className="fill-current" />
               </button>
             )}
           </div>
@@ -258,23 +226,23 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
           <button
             type="button"
             onClick={() => setMicActive(!micActive)}
-            title={micActive ? 'Mute Microphone' : 'Push to Talk'}
-            className={`p-3 rounded-xl border transition-all shrink-0 mb-0.5 ${
+            title={micActive ? 'Mute' : 'Voice input'}
+            className={`p-2.5 rounded-xl border transition-colors shrink-0 mb-0.5 ${
               micActive
-                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse'
-                : 'bg-white/[0.03] border-white/10 text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                ? 'bg-semantic-online/20 border-semantic-online/40 text-semantic-online'
+                : 'bg-surface border-surface-border text-text-muted hover:text-text hover:bg-surface-elevated'
             }`}
           >
-            {micActive ? <Mic size={18} /> : <MicOff size={18} />}
+            {micActive ? <Mic size={17} /> : <MicOff size={17} />}
           </button>
 
           {/* Send Button */}
           <button
             type="submit"
             disabled={!inputText.trim()}
-            className="p-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-30 disabled:hover:bg-cyan-500 text-obsidian-950 font-semibold transition-all shrink-0 shadow-neon-cyan mb-0.5"
+            className="p-2.5 rounded-xl bg-signal hover:bg-signal-hover disabled:opacity-30 disabled:hover:bg-signal text-white transition-colors shrink-0 mb-0.5"
           >
-            <Send size={18} />
+            <Send size={16} />
           </button>
         </form>
       </div>

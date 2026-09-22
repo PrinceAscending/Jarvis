@@ -7,45 +7,50 @@ export default {
   theme: {
     extend: {
       colors: {
-        obsidian: {
-          950: '#030508',
-          900: '#070A10',
-          850: '#0B0F17',
-          800: '#0E131F',
-          700: '#161D2E',
-          600: '#232C42',
+        void: '#0A0E17',
+        surface: {
+          DEFAULT: '#121829',
+          elevated: '#182035',
+          subtle: '#0E1321',
+          border: 'rgba(255, 255, 255, 0.07)',
         },
-        cyan: {
-          neon: '#00F0FF',
-          glow: '#00D1E0',
-          dim: 'rgba(0, 240, 255, 0.12)',
-          border: 'rgba(0, 240, 255, 0.3)',
+        glass: {
+          DEFAULT: '#1A2236',
+          active: '#222C46',
+          border: 'rgba(255, 255, 255, 0.08)',
         },
-        violet: {
-          neon: '#8B5CF6',
-          glow: '#A78BFA',
-          dim: 'rgba(139, 92, 246, 0.12)',
+        signal: {
+          DEFAULT: '#4F6AE8',
+          hover: '#6079EE',
+          dim: 'rgba(79, 106, 232, 0.12)',
+          border: 'rgba(79, 106, 232, 0.3)',
         },
-        amber: {
-          neon: '#F59E0B',
-          dim: 'rgba(245, 158, 11, 0.15)',
+        warm: {
+          DEFAULT: '#E2A869',
+          bright: '#F3BE86',
+          dim: 'rgba(226, 168, 105, 0.15)',
+        },
+        text: {
+          DEFAULT: '#C8CDD8',
+          muted: '#636A84',
+          bright: '#F1F3F9',
+        },
+        semantic: {
+          online: '#34D399',
+          warning: '#FBBF24',
+          error: '#F87171',
+          thinking: '#A78BFA',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        sans: ['Geist', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['Geist Mono', 'JetBrains Mono', 'monospace'],
+        display: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'neon-cyan': '0 0 25px rgba(0, 240, 255, 0.35)',
-        'neon-violet': '0 0 25px rgba(139, 92, 246, 0.35)',
-        'glass-edge': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)',
-        'reactor-glow': '0 0 60px rgba(0, 240, 255, 0.25)',
-      },
-      animation: {
-        'pulse-slow': 'pulse 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'spin-slow': 'spin 18s linear infinite',
-        'spin-reverse': 'spin 24s linear infinite reverse',
+        soft: '0 1px 3px rgba(0, 0, 0, 0.4)',
+        elevated: '0 4px 20px rgba(0, 0, 0, 0.3)',
+        'orb-glow': '0 0 50px rgba(79, 106, 232, 0.25)',
       },
     },
   },

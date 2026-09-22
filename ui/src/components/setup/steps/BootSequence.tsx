@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { AudioVisualizerOrb } from '@/components/audio/AudioVisualizerOrb';
-import { CheckCircle2 } from 'lucide-react';
 
 interface BootSequenceProps {
   onComplete: () => void;
@@ -11,14 +10,14 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, assistan
   const [logs, setLogs] = useState<string[]>([]);
 
   const BOOT_LOGS = [
-    'ESTABLISHING SECURE RUNTIME PIPELINE...',
-    'INITIALIZING DYNAMIC TOOL REGISTRY (19 TOOLS ONLINE)...',
-    'MOUNTING PERSISTENT SQLITE MEMORY DATABASE...',
-    'CONNECTING TO NEURAL INFERENCE ENGINE...',
-    'SYNCHRONIZING EDGE TTS ACOUSTIC MATRIX...',
-    'ARMING PROACTIVE TELEMETRY & HEALTH WATCHDOG...',
-    'ALL SUBSYSTEMS NOMINAL.',
-    `WELCOME, OPERATOR. ${assistantName.toUpperCase()} IS ONLINE.`,
+    'Establishing secure local runtime pipeline...',
+    'Registering automation tools (19 available)...',
+    'Mounting persistent memory database...',
+    'Connecting to inference engine...',
+    'Synchronizing speech synthesizer...',
+    'Starting telemetry and system monitor...',
+    'Core systems ready.',
+    `Welcome. ${assistantName} is online.`,
   ];
 
   useEffect(() => {
@@ -33,35 +32,35 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, assistan
           onComplete();
         }, 1200);
       }
-    }, 400);
+    }, 380);
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-obsidian-950 flex flex-col items-center justify-center p-6 z-50 cyber-grid select-none animate-fade-slide-in">
-      <div className="flex flex-col items-center max-w-lg w-full space-y-6 text-center">
-        {/* Arc Reactor Core Pulsing */}
-        <div className="scale-110">
-          <AudioVisualizerOrb status="speaking" size={240} />
+    <div className="fixed inset-0 bg-void flex flex-col items-center justify-center p-6 z-50 select-none animate-fade-in">
+      <div className="flex flex-col items-center max-w-md w-full space-y-5 text-center">
+        {/* Visualizer Core */}
+        <div className="scale-105">
+          <AudioVisualizerOrb status="speaking" size={220} />
         </div>
 
-        {/* Brand */}
-        <div className="space-y-1">
-          <h1 className="text-2xl font-display font-bold tracking-widest text-zinc-100 uppercase">
-            {assistantName} CORE ACTIVATION
+        {/* Title */}
+        <div className="space-y-0.5">
+          <h1 className="text-xl font-semibold text-text-bright tracking-tight">
+            Starting {assistantName}
           </h1>
-          <p className="text-xs font-mono text-cyan-neon tracking-widest uppercase animate-pulse">
-            System Booting // Windows 11
+          <p className="text-xs text-text-muted font-mono">
+            Windows 11 Runtime Environment
           </p>
         </div>
 
         {/* Terminal Boot Log */}
-        <div className="w-full glass-panel p-4 rounded-xl border-cyan-neon/30 text-left font-mono text-[11px] space-y-1.5 h-44 overflow-hidden shadow-neon-cyan/10">
+        <div className="w-full surface-card terminal-grid p-4 rounded-xl border border-surface-border text-left font-mono text-[11px] space-y-1.5 h-44 overflow-hidden bg-void/80 shadow-elevated">
           {logs.map((log, idx) => (
-            <div key={idx} className="flex items-center gap-2 animate-fade-slide-in">
-              <span className="text-cyan-neon">[OK]</span>
-              <span className={idx === logs.length - 1 ? 'text-zinc-100 font-bold' : 'text-zinc-400'}>
+            <div key={idx} className="flex items-center gap-2 animate-fade-in">
+              <span className="text-semantic-online">[OK]</span>
+              <span className={idx === logs.length - 1 ? 'text-text-bright font-medium' : 'text-text-muted'}>
                 {log}
               </span>
             </div>

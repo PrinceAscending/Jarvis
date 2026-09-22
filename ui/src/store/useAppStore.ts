@@ -84,7 +84,11 @@ export const useAppStore = create<AppStore>((set) => ({
     {
       id: 'welcome',
       role: 'assistant',
-      content: "Online and ready, sir. All core systems operational. How may I assist you today?",
+      content: (() => {
+        const hour = new Date().getHours();
+        const greeting = hour >= 5 && hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+        return `${greeting}. What can I help with today?`;
+      })(),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     }
   ],

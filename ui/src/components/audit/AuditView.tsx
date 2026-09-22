@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, RefreshCw, CheckCircle2, XCircle } from 'lucide-react';
+import { ShieldCheck, RefreshCw, CheckCircle2, X } from 'lucide-react';
 
 export const AuditView: React.FC = () => {
   const [logs, setLogs] = useState<any[]>([]);
@@ -19,58 +19,58 @@ export const AuditView: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex-1 h-full overflow-y-auto p-6 md:p-8 space-y-6 cyber-grid select-none">
+    <div className="flex-1 h-full overflow-y-auto p-6 md:p-8 space-y-6 select-none bg-void">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-display font-bold tracking-wider text-zinc-100 uppercase flex items-center gap-2">
-            <ShieldAlert className="text-cyan-neon" size={20} />
-            Security & Tool Execution Audit Trail
+          <h2 className="text-lg font-semibold tracking-tight text-text-bright flex items-center gap-2">
+            <ShieldCheck className="text-signal" size={18} />
+            Audit log
           </h2>
-          <p className="text-xs font-mono text-zinc-400 mt-0.5">
-            Immutable log of all tools, system parameters, commands, and security operations
+          <p className="text-xs text-text-muted mt-0.5">
+            Log of tool executions, arguments, and status
           </p>
         </div>
 
         <button
           onClick={fetchLogs}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-mono text-cyan-neon transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-elevated border border-surface-border text-xs text-text hover:text-text-bright transition-colors"
         >
-          <RefreshCw size={13} />
-          <span>REFRESH LOGS</span>
+          <RefreshCw size={12} />
+          <span>Refresh</span>
         </button>
       </div>
 
       {/* Logs Table */}
-      <div className="glass-panel rounded-2xl border-white/10 p-5">
+      <div className="surface-card rounded-xl p-5">
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-mono text-xs">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-white/10 text-zinc-500 text-[10px] tracking-wider uppercase">
-                <th className="pb-2">Timestamp</th>
-                <th className="pb-2">Tool Name</th>
-                <th className="pb-2">Arguments</th>
-                <th className="pb-2">Status</th>
+              <tr className="border-b border-surface-border text-text-muted text-[11px]">
+                <th className="pb-2.5 font-normal">Timestamp</th>
+                <th className="pb-2.5 font-normal">Tool</th>
+                <th className="pb-2.5 font-normal">Arguments</th>
+                <th className="pb-2.5 font-normal">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-surface-border/60">
               {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-white/[0.02] transition-colors">
-                  <td className="py-3 text-zinc-400 whitespace-nowrap">{log.timestamp}</td>
-                  <td className="py-3 text-cyan-neon font-semibold">{log.tool_name}</td>
-                  <td className="py-3 text-zinc-300 max-w-xs truncate">{log.arguments}</td>
-                  <td className="py-3">
+                <tr key={log.id} className="hover:bg-surface-elevated/40 transition-colors">
+                  <td className="py-2.5 text-text-muted text-[11px] font-mono whitespace-nowrap">{log.timestamp}</td>
+                  <td className="py-2.5 text-text-bright font-mono text-[11px] font-medium">{log.tool_name}</td>
+                  <td className="py-2.5 text-text-muted font-mono text-[11px] max-w-xs truncate">{log.arguments}</td>
+                  <td className="py-2.5">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] ${
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] ${
                         log.status === 'success'
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                          : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          ? 'bg-semantic-online/15 text-semantic-online'
+                          : 'bg-semantic-error/15 text-semantic-error'
                       }`}
                     >
                       {log.status === 'success' ? (
-                        <CheckCircle2 size={11} />
+                        <CheckCircle2 size={10} />
                       ) : (
-                        <XCircle size={11} />
+                        <X size={10} />
                       )}
                       {log.status}
                     </span>
@@ -79,8 +79,8 @@ export const AuditView: React.FC = () => {
               ))}
               {logs.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-8 text-center text-zinc-500 font-mono text-xs">
-                    No audit records logged yet. Commands will appear here automatically.
+                  <td colSpan={4} className="py-8 text-center text-text-muted text-xs">
+                    No actions logged yet. Executed tools will appear here automatically.
                   </td>
                 </tr>
               )}

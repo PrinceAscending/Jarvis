@@ -19,36 +19,33 @@ export const PermissionsStep: React.FC<PermissionsStepProps> = ({
   onBack,
 }) => {
   return (
-    <div className="flex flex-col max-w-xl mx-auto space-y-6 animate-fade-slide-in">
+    <div className="flex flex-col max-w-md mx-auto space-y-5 animate-fade-in">
       <div className="text-center space-y-1">
-        <h2 className="text-xl md:text-2xl font-display font-bold text-zinc-100 tracking-wider uppercase">
-          Autonomy & System Guardrails
+        <h2 className="text-xl font-semibold text-text-bright tracking-tight">
+          Permissions & autonomy
         </h2>
-        <p className="text-xs text-zinc-400 font-mono">
-          Determine how much freedom J.A.R.V.I.S. has when executing system actions.
+        <p className="text-xs text-text-muted">
+          Control how much freedom Jarvis has when executing actions.
         </p>
       </div>
 
       {/* Permission Tiers */}
-      <div className="space-y-3">
+      <div className="space-y-2 pt-1">
         {[
           {
             id: 'interactive',
-            name: 'Interactive Autonomy (Recommended)',
-            tag: 'Balanced',
-            desc: 'Executes harmless and read-only actions immediately; prompts for destructive or shell operations.',
+            name: 'Ask for risky actions (Recommended)',
+            desc: 'Executes read-only operations automatically; prompts for deletions or terminal commands.',
           },
           {
             id: 'strict',
-            name: 'Strict Verification Mode',
-            tag: 'Maximum Caution',
-            desc: 'Asks for explicit operator confirmation before executing any modification or external action.',
+            name: 'Ask before acting',
+            desc: 'Requests explicit confirmation before performing any action on your system.',
           },
           {
             id: 'autonomous',
-            name: 'Autonomous Assistant Mode',
-            tag: 'Full Freedom',
-            desc: 'Executes multi-step workflows with full autonomy, only pausing on critical security actions.',
+            name: 'Act independently',
+            desc: 'Runs multi-step workflows autonomously, pausing only on critical security gates.',
           },
         ].map((tier) => {
           const isSelected = permissionsLevel === tier.id;
@@ -56,42 +53,42 @@ export const PermissionsStep: React.FC<PermissionsStepProps> = ({
             <div
               key={tier.id}
               onClick={() => setPermissionsLevel(tier.id)}
-              className={`p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+              className={`p-3.5 rounded-xl border cursor-pointer transition-colors flex flex-col justify-between ${
                 isSelected
-                  ? 'border-cyan-neon/50 bg-cyan-500/10 shadow-[0_0_15px_rgba(0,240,255,0.1)]'
-                  : 'border-white/10 hover:border-white/20 hover:bg-white/[0.02]'
+                  ? 'border-signal/50 bg-surface-elevated text-text-bright'
+                  : 'border-surface-border hover:border-surface-border/80 bg-surface text-text'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Shield
-                    size={16}
-                    className={isSelected ? 'text-cyan-neon' : 'text-zinc-400'}
+                    size={15}
+                    className={isSelected ? 'text-signal' : 'text-text-muted'}
                   />
-                  <span className="text-xs font-mono font-bold text-zinc-100">
+                  <span className="text-xs font-medium">
                     {tier.name}
                   </span>
                 </div>
-                {isSelected && <CheckCircle2 size={16} className="text-cyan-neon" />}
+                {isSelected && <CheckCircle2 size={15} className="text-signal" />}
               </div>
-              <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">{tier.desc}</p>
+              <p className="text-[11px] text-text-muted mt-1 leading-relaxed">{tier.desc}</p>
             </div>
           );
         })}
       </div>
 
       {/* Proactive Automation Toggle */}
-      <div className="glass-panel p-4 rounded-xl border-white/10 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-neon/30 flex items-center justify-center text-cyan-neon">
-            <Zap size={16} />
+      <div className="surface-card p-3.5 rounded-xl flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-surface-well border border-surface-border flex items-center justify-center text-signal">
+            <Zap size={14} />
           </div>
           <div>
-            <div className="text-xs font-mono font-semibold text-zinc-200">
-              Proactive Health & Telemetry Alerts
+            <div className="text-xs font-medium text-text-bright">
+              Proactive system alerts
             </div>
-            <div className="text-[10px] text-zinc-400">
-              Suggest RAM cleanups and notify on high memory usage automatically
+            <div className="text-[10px] text-text-muted">
+              Notify when memory or CPU usage is elevated
             </div>
           </div>
         </div>
@@ -99,13 +96,13 @@ export const PermissionsStep: React.FC<PermissionsStepProps> = ({
         <button
           type="button"
           onClick={() => setProactiveEnabled(!proactiveEnabled)}
-          className={`w-11 h-6 rounded-full transition-colors relative ${
-            proactiveEnabled ? 'bg-cyan-500' : 'bg-white/10'
+          className={`w-10 h-5 rounded-full transition-colors relative ${
+            proactiveEnabled ? 'bg-signal' : 'bg-surface-elevated border border-surface-border'
           }`}
         >
           <div
-            className={`w-4 h-4 rounded-full bg-obsidian-950 absolute top-1 transition-transform ${
-              proactiveEnabled ? 'translate-x-6' : 'translate-x-1'
+            className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
+              proactiveEnabled ? 'translate-x-5' : 'translate-x-0.5'
             }`}
           />
         </button>
@@ -116,19 +113,19 @@ export const PermissionsStep: React.FC<PermissionsStepProps> = ({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/20 text-zinc-400 hover:text-zinc-200 font-mono text-xs transition-colors"
+          className="flex items-center gap-1 px-3.5 py-2 rounded-lg border border-surface-border hover:bg-surface text-text-muted text-xs transition-colors"
         >
-          <ArrowLeft size={14} />
+          <ArrowLeft size={13} />
           <span>Back</span>
         </button>
 
         <button
           type="button"
           onClick={onNext}
-          className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-obsidian-950 font-display font-bold text-xs tracking-wider uppercase transition-all shadow-neon-cyan"
+          className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-signal hover:bg-signal-hover text-white text-xs font-medium transition-colors"
         >
-          <span>Review Configuration</span>
-          <ArrowRight size={14} />
+          <span>Next</span>
+          <ArrowRight size={13} />
         </button>
       </div>
     </div>

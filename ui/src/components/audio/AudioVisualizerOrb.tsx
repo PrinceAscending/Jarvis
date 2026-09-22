@@ -26,35 +26,35 @@ export const AudioVisualizerOrb: React.FC<VisualizerProps> = ({ status, size = 2
       phase += 0.04;
       ringAngle += status === 'tool_executing' ? 0.05 : 0.015;
 
-      // Status-specific color palette
-      let primaryGlow = 'rgba(0, 240, 255, 0.85)';
-      let secondaryGlow = 'rgba(0, 240, 255, 0.25)';
-      let coreColor = 'rgba(0, 240, 255, 0.9)';
+      // Status-specific color palette (aerospace cockpit instrumentation)
+      let primaryGlow = 'rgba(226, 168, 105, 0.85)'; // Warm amber idle
+      let secondaryGlow = 'rgba(226, 168, 105, 0.22)';
+      let coreColor = 'rgba(243, 190, 134, 0.95)';
       let speedMultiplier = 1.0;
       let amplitude = 6;
 
       if (status === 'thinking') {
-        primaryGlow = 'rgba(139, 92, 246, 0.9)';
-        secondaryGlow = 'rgba(139, 92, 246, 0.3)';
-        coreColor = 'rgba(167, 139, 250, 0.95)';
+        primaryGlow = 'rgba(167, 139, 250, 0.9)'; // Violet synthesis
+        secondaryGlow = 'rgba(167, 139, 250, 0.25)';
+        coreColor = 'rgba(196, 181, 253, 0.95)';
         speedMultiplier = 2.0;
         amplitude = 10;
       } else if (status === 'tool_executing') {
-        primaryGlow = 'rgba(245, 158, 11, 0.9)';
-        secondaryGlow = 'rgba(245, 158, 11, 0.3)';
-        coreColor = 'rgba(251, 191, 36, 0.95)';
-        speedMultiplier = 2.5;
+        primaryGlow = 'rgba(251, 191, 36, 0.9)'; // Active execution amber
+        secondaryGlow = 'rgba(251, 191, 36, 0.25)';
+        coreColor = 'rgba(253, 230, 138, 0.95)';
+        speedMultiplier = 2.4;
         amplitude = 12;
       } else if (status === 'speaking') {
-        primaryGlow = 'rgba(0, 240, 255, 1)';
-        secondaryGlow = 'rgba(56, 189, 248, 0.4)';
-        coreColor = 'rgba(255, 255, 255, 0.95)';
+        primaryGlow = 'rgba(79, 106, 232, 0.95)'; // Signal indigo wave
+        secondaryGlow = 'rgba(99, 125, 240, 0.35)';
+        coreColor = 'rgba(255, 255, 255, 0.98)';
         speedMultiplier = 1.8;
-        amplitude = 18;
+        amplitude = 16;
       } else if (status === 'listening') {
-        primaryGlow = 'rgba(16, 185, 129, 0.95)';
-        secondaryGlow = 'rgba(16, 185, 129, 0.3)';
-        coreColor = 'rgba(52, 211, 153, 0.95)';
+        primaryGlow = 'rgba(52, 211, 153, 0.95)'; // Acoustic reception emerald
+        secondaryGlow = 'rgba(52, 211, 153, 0.25)';
+        coreColor = 'rgba(110, 231, 183, 0.95)';
         speedMultiplier = 1.2;
         amplitude = 14;
       }

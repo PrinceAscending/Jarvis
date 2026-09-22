@@ -4,8 +4,8 @@ import {
   Activity,
   BrainCircuit,
   Zap,
-  ShieldAlert,
-  Settings2,
+  ShieldCheck,
+  Settings,
 } from 'lucide-react';
 import { useAppStore, NavigationTab } from '@/store/useAppStore';
 
@@ -16,25 +16,21 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'chat', label: 'Command Core', icon: MessageSquareCode },
-  { id: 'dashboard', label: 'Telemetry', icon: Activity },
-  { id: 'memory', label: 'Memory Core', icon: BrainCircuit },
+  { id: 'chat', label: 'Chat', icon: MessageSquareCode },
+  { id: 'dashboard', label: 'System', icon: Activity },
+  { id: 'memory', label: 'Memory', icon: BrainCircuit },
   { id: 'automations', label: 'Workflows', icon: Zap },
-  { id: 'audit', label: 'Security Audit', icon: ShieldAlert },
-  { id: 'settings', label: 'Neural Matrix', icon: Settings2 },
+  { id: 'audit', label: 'Audit log', icon: ShieldCheck },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
 export const NavigationSidebar: React.FC = () => {
   const { activeTab, setActiveTab } = useAppStore();
 
   return (
-    <aside className="w-16 md:w-56 h-full flex flex-col justify-between border-r border-white/[0.06] bg-obsidian-900/60 backdrop-blur-xl select-none z-20">
+    <aside className="w-14 md:w-48 h-full flex flex-col justify-between border-r border-surface-border bg-void select-none z-20">
       {/* Navigation Links */}
-      <div className="p-3 space-y-1.5">
-        <div className="hidden md:block px-3 py-2 text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
-          Operating Modules
-        </div>
-
+      <div className="p-2 space-y-1">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -43,22 +39,22 @@ export const NavigationSidebar: React.FC = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl transition-all relative group ${
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all relative ${
                 isActive
-                  ? 'bg-cyan-500/10 text-cyan-neon border border-cyan-neon/30 shadow-[0_0_15px_rgba(0,240,255,0.15)]'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
+                  ? 'bg-surface-elevated text-text-bright font-medium border border-surface-border'
+                  : 'text-text-muted hover:text-text hover:bg-surface/60 border border-transparent'
               }`}
             >
               {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-cyan-neon rounded-r" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-signal rounded-r-full" />
               )}
               <Icon
-                size={18}
-                className={`shrink-0 transition-transform duration-200 ${
-                  isActive ? 'scale-110 text-cyan-neon' : 'group-hover:scale-105'
+                size={17}
+                className={`shrink-0 transition-colors ${
+                  isActive ? 'text-signal' : 'text-text-muted'
                 }`}
               />
-              <span className="hidden md:inline-block text-xs font-medium tracking-wide">
+              <span className="hidden md:inline-block tracking-normal">
                 {item.label}
               </span>
             </button>
@@ -66,16 +62,11 @@ export const NavigationSidebar: React.FC = () => {
         })}
       </div>
 
-      {/* Cybernetic Accent Footer */}
-      <div className="p-3 border-t border-white/[0.05]">
-        <div className="hidden md:flex flex-col gap-1 p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.05]">
-          <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400">
-            <span>JARVIS CORE</span>
-            <span className="text-emerald-400">ONLINE</span>
-          </div>
-          <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-            <div className="bg-cyan-neon h-full w-4/5 animate-pulse" />
-          </div>
+      {/* Subtle version footnote */}
+      <div className="p-3 border-t border-surface-border hidden md:block">
+        <div className="text-[11px] text-text-muted/70 flex items-center justify-between">
+          <span>Jarvis</span>
+          <span>v4.2.0</span>
         </div>
       </div>
     </aside>

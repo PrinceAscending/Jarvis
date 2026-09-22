@@ -14,37 +14,37 @@ const ToastMessage: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void
   }, [toast, onDismiss]);
 
   const icons = {
-    success: <CheckCircle2 className="text-cyan-neon shrink-0 mt-0.5" size={17} />,
-    error: <AlertCircle className="text-rose-400 shrink-0 mt-0.5" size={17} />,
-    warning: <AlertTriangle className="text-amber-400 shrink-0 mt-0.5" size={17} />,
-    info: <Info className="text-zinc-300 shrink-0 mt-0.5" size={17} />,
+    success: <CheckCircle2 className="text-semantic-online shrink-0 mt-0.5" size={16} />,
+    error: <AlertCircle className="text-semantic-error shrink-0 mt-0.5" size={16} />,
+    warning: <AlertTriangle className="text-semantic-warning shrink-0 mt-0.5" size={16} />,
+    info: <Info className="text-signal shrink-0 mt-0.5" size={16} />,
   };
 
   const borders = {
-    success: 'border-cyan-neon/40 shadow-neon-cyan/20 bg-obsidian-900/95',
-    error: 'border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.2)] bg-obsidian-900/95',
-    warning: 'border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.2)] bg-obsidian-900/95',
-    info: 'border-white/15 bg-obsidian-900/95',
+    success: 'border-semantic-online/30 bg-surface-elevated',
+    error: 'border-semantic-error/30 bg-surface-elevated',
+    warning: 'border-semantic-warning/30 bg-surface-elevated',
+    info: 'border-surface-border bg-surface-elevated',
   };
 
   return (
     <div
-      className={`glass-panel p-3.5 rounded-xl border flex items-start gap-3 w-80 md:w-96 shadow-xl animate-fade-slide-in pointer-events-auto transition-all ${borders[toast.type]}`}
+      className={`p-3.5 rounded-xl border flex items-start gap-3 w-80 md:w-96 shadow-elevated animate-fade-in pointer-events-auto transition-all ${borders[toast.type]}`}
     >
       {icons[toast.type]}
       <div className="flex-1 overflow-hidden font-sans">
-        <div className="text-xs font-display font-semibold text-zinc-100 tracking-wide">
+        <div className="text-xs font-medium text-text-bright">
           {toast.title}
         </div>
         {toast.message && (
-          <div className="text-[11px] text-zinc-400 mt-0.5 leading-relaxed break-words">
+          <div className="text-[11px] text-text-muted mt-0.5 leading-relaxed break-words">
             {toast.message}
           </div>
         )}
       </div>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="text-zinc-500 hover:text-zinc-200 p-0.5 transition-colors"
+        className="text-text-muted hover:text-text-bright p-0.5 transition-colors"
       >
         <X size={13} />
       </button>

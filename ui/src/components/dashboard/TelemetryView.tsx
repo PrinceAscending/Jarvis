@@ -5,8 +5,7 @@ import {
   Activity,
   Layers,
   RefreshCw,
-  XCircle,
-  Zap,
+  X,
 } from 'lucide-react';
 
 export const TelemetryView: React.FC = () => {
@@ -15,6 +14,7 @@ export const TelemetryView: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const res = await fetch('http://127.0.0.1:8765/api/tools/execute', {
         method: 'POST',
@@ -37,12 +37,14 @@ export const TelemetryView: React.FC = () => {
       }
     } catch (e) {
       console.error('Failed to fetch telemetry', e);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 3000);
+    const interval = setInterval(fetchData, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -60,91 +62,92 @@ export const TelemetryView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 h-full overflow-y-auto p-6 md:p-8 space-y-6 cyber-grid select-none">
+    <div className="flex-1 h-full overflow-y-auto p-6 md:p-8 space-y-6 select-none bg-void">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-display font-bold tracking-wider text-zinc-100 uppercase flex items-center gap-2">
-            <Activity className="text-cyan-neon" size={20} />
-            System Telemetry & Hardware Diagnostics
+          <h2 className="text-lg font-semibold tracking-tight text-text-bright flex items-center gap-2">
+            <Activity className="text-signal" size={18} />
+            System
           </h2>
-          <p className="text-xs font-mono text-zinc-400 mt-0.5">
-            {stats?.os || 'Windows 11 Diagnostics Engine'}
+          <p className="text-xs text-text-muted mt-0.5">
+            Hardware utilization and active Windows processes
           </p>
         </div>
 
         <button
           onClick={fetchData}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-mono text-cyan-neon transition-colors"
+          disabled={loading}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-elevated border border-surface-border text-xs text-text hover:text-text-bright transition-colors"
         >
-          <RefreshCw size={13} />
-          <span>REFRESH</span>
+          <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
+          <span>Refresh</span>
         </button>
       </div>
 
       {/* Metrics Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* CPU */}
-        <div className="glass-panel p-5 rounded-2xl border-white/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-mono tracking-widest text-zinc-400 uppercase">
-              Processor Load
+        <div className="surface-card p-5 rounded-xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-text-muted">
+              Processor
             </span>
-            <Cpu size={18} className="text-cyan-neon" />
+            <Cpu size={16} className="text-text-muted" />
           </div>
-          <div className="text-3xl font-display font-bold text-zinc-100">
+          <div className="text-2xl font-semibold text-warm">
             {stats?.cpu?.usage_percent ?? '--'}%
           </div>
-          <div className="text-[11px] font-mono text-zinc-400 mt-1">
-            Cores: {stats?.cpu?.logical_cores ?? '--'} Logical Cores
+          <div className="text-[11px] text-text-muted mt-1">
+            {stats?.cpu?.logical_cores ? `${stats.cpu.logical_cores} logical cores` : 'Windows host'}
           </div>
-          <div className="w-full bg-white/5 h-2 rounded-full mt-4 overflow-hidden">
+          <div className="w-full bg-surface-well h-1.5 rounded-full mt-4 overflow-hidden">
             <div
-              className="bg-cyan-neon h-full transition-all duration-500 shadow-neon-cyan"
+              className="bg-signal h-full transition-all duration-500"
               style={{ width: `${stats?.cpu?.usage_percent || 0}%` }}
             />
           </div>
         </div>
 
         {/* Memory */}
-        <div className="glass-panel p-5 rounded-2xl border-white/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-mono tracking-widest text-zinc-400 uppercase">
+        <div className="surface-card p-5 rounded-xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-text-muted">
               System RAM
             </span>
-            <Layers size={18} className="text-violet-neon" />
+            <Layers size={16} className="text-text-muted" />
           </div>
-          <div className="text-3xl font-display font-bold text-zinc-100">
+          <div className="text-2xl font-semibold text-warm">
             {stats?.memory?.percent ?? '--'}%
           </div>
-          <div className="text-[11px] font-mono text-zinc-400 mt-1">
-            {stats?.memory?.used_gb ?? '--'} GB / {stats?.memory?.total_gb ?? '--'} GB Used
+          <div className="text-[11px] text-text-muted mt-1">
+            {stats?.memory?.used_gb ?? '--'} GB of {stats?.memory?.total_gb ?? '--'} GB used
           </div>
-          <div className="w-full bg-white/5 h-2 rounded-full mt-4 overflow-hidden">
+          <div className="w-full bg-surface-well h-1.5 rounded-full mt-4 overflow-hidden">
             <div
-              className="bg-violet-neon h-full transition-all duration-500 shadow-neon-violet"
+              className="bg-signal h-full transition-all duration-500"
               style={{ width: `${stats?.memory?.percent || 0}%` }}
             />
           </div>
         </div>
 
         {/* Disk */}
-        <div className="glass-panel p-5 rounded-2xl border-white/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-mono tracking-widest text-zinc-400 uppercase">
-              System Drive (C:)
+        <div className="surface-card p-5 rounded-xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-text-muted">
+              Storage (C:)
             </span>
-            <HardDrive size={18} className="text-amber-neon" />
+            <HardDrive size={16} className="text-text-muted" />
           </div>
-          <div className="text-3xl font-display font-bold text-zinc-100">
+          <div className="text-2xl font-semibold text-warm">
             {stats?.disk?.percent ?? '--'}%
           </div>
-          <div className="text-[11px] font-mono text-zinc-400 mt-1">
-            {stats?.disk?.free_gb ?? '--'} GB Free of {stats?.disk?.total_gb ?? '--'} GB
+          <div className="text-[11px] text-text-muted mt-1">
+            {stats?.disk?.free_gb ?? '--'} GB free of {stats?.disk?.total_gb ?? '--'} GB
           </div>
-          <div className="w-full bg-white/5 h-2 rounded-full mt-4 overflow-hidden">
+          <div className="w-full bg-surface-well h-1.5 rounded-full mt-4 overflow-hidden">
             <div
-              className="bg-amber-neon h-full transition-all duration-500"
+              className="bg-signal h-full transition-all duration-500"
               style={{ width: `${stats?.disk?.percent || 0}%` }}
             />
           </div>
@@ -152,37 +155,36 @@ export const TelemetryView: React.FC = () => {
       </div>
 
       {/* Top Processes Table */}
-      <div className="glass-panel rounded-2xl border-white/10 p-5">
-        <h3 className="text-sm font-mono tracking-wider text-zinc-300 uppercase mb-4 flex items-center gap-2">
-          <Zap size={15} className="text-cyan-neon" />
-          Top Running Windows Processes
+      <div className="surface-card rounded-xl p-5">
+        <h3 className="text-sm font-medium text-text-bright mb-4">
+          Active processes
         </h3>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-mono text-xs">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-white/10 text-zinc-500 text-[10px] tracking-wider uppercase">
-                <th className="pb-2">PID</th>
-                <th className="pb-2">Process Name</th>
-                <th className="pb-2">CPU</th>
-                <th className="pb-2">RAM</th>
-                <th className="pb-2 text-right">Action</th>
+              <tr className="border-b border-surface-border text-text-muted text-[11px]">
+                <th className="pb-2.5 font-normal">PID</th>
+                <th className="pb-2.5 font-normal">Process name</th>
+                <th className="pb-2.5 font-normal">CPU</th>
+                <th className="pb-2.5 font-normal">Memory</th>
+                <th className="pb-2.5 text-right font-normal">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-surface-border/60">
               {processes.map((p) => (
-                <tr key={p.pid} className="hover:bg-white/[0.02] transition-colors">
-                  <td className="py-2.5 text-zinc-400">{p.pid}</td>
-                  <td className="py-2.5 text-zinc-200 font-medium">{p.name}</td>
-                  <td className="py-2.5 text-cyan-neon">{p.cpu_percent}%</td>
-                  <td className="py-2.5 text-violet-glow">{p.memory_mb} MB</td>
+                <tr key={p.pid} className="hover:bg-surface-elevated/40 transition-colors">
+                  <td className="py-2.5 text-text-muted font-mono text-[11px]">{p.pid}</td>
+                  <td className="py-2.5 text-text-bright font-normal">{p.name}</td>
+                  <td className="py-2.5 text-warm font-mono">{p.cpu_percent}%</td>
+                  <td className="py-2.5 text-text-muted font-mono">{p.memory_mb} MB</td>
                   <td className="py-2.5 text-right">
                     <button
                       onClick={() => handleKill(p.pid)}
-                      title="Terminate Process"
-                      className="p-1 rounded hover:bg-rose-500/20 text-zinc-500 hover:text-rose-400 transition-colors"
+                      title="End process"
+                      className="p-1 rounded hover:bg-semantic-error/15 text-text-muted hover:text-semantic-error transition-colors"
                     >
-                      <XCircle size={14} />
+                      <X size={13} />
                     </button>
                   </td>
                 </tr>

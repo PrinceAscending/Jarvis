@@ -16,16 +16,16 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   return (
     <div
       style={{ width, height }}
-      className={`bg-white/[0.04] animate-shimmer border border-white/[0.05] ${rounded} ${className}`}
+      className={`bg-surface animate-shimmer border border-surface-border ${rounded} ${className}`}
     />
   );
 };
 
 export const SkeletonCard: React.FC<{ height?: string }> = ({ height = 'h-32' }) => {
   return (
-    <div className={`glass-panel p-5 rounded-2xl border-white/10 ${height} flex flex-col justify-between`}>
+    <div className={`surface-card p-5 rounded-xl ${height} flex flex-col justify-between`}>
       <div className="flex items-center gap-3">
-        <Skeleton width={32} height={32} rounded="rounded-xl" />
+        <Skeleton width={32} height={32} rounded="rounded-lg" />
         <div className="space-y-1.5 flex-1">
           <Skeleton width="40%" height={14} />
           <Skeleton width="70%" height={10} />

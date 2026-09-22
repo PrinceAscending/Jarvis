@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, ArrowRight, User, Bot } from 'lucide-react';
+import { User, Bot } from 'lucide-react';
 import { AudioVisualizerOrb } from '@/components/audio/AudioVisualizerOrb';
 
 interface WelcomeStepProps {
@@ -25,64 +25,59 @@ export const WelcomeStep: React.FC<WelcomeStepProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center max-w-xl mx-auto text-center space-y-6 animate-fade-slide-in">
-      {/* Reactor Visualizer */}
+    <div className="flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-5 animate-fade-in">
+      {/* Reactor Visualizer with warm ambient presence */}
       <div className="relative">
-        <AudioVisualizerOrb status="idle" size={180} />
+        <AudioVisualizerOrb status="idle" size={160} />
       </div>
 
       {/* Title & Tagline */}
-      <div className="space-y-1.5">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-neon/30 text-cyan-neon font-mono text-[10px] tracking-widest uppercase mb-1">
-          <Sparkles size={11} />
-          First-Run Initialization
-        </div>
-        <h1 className="text-2xl md:text-3xl font-display font-bold text-zinc-100 tracking-wider uppercase">
-          Welcome to <span className="text-cyan-neon">J.A.R.V.I.S.</span>
+      <div className="space-y-1">
+        <h1 className="text-2xl font-semibold text-text-bright tracking-tight">
+          Welcome to Jarvis
         </h1>
-        <p className="text-xs text-zinc-400 font-mono max-w-md">
-          Personal Intelligence System for Windows 11. Let's calibrate your environment.
+        <p className="text-xs text-text-muted max-w-sm">
+          A personal assistant built directly into Windows 11.
         </p>
       </div>
 
       {/* Identity Form */}
-      <form onSubmit={handleSubmit} className="w-full space-y-4 text-left">
+      <form onSubmit={handleSubmit} className="w-full space-y-3.5 text-left pt-2">
         <div>
-          <label className="block text-xs font-mono text-zinc-300 mb-1.5 flex items-center gap-1.5">
-            <Bot size={13} className="text-cyan-neon" />
-            Assistant Designation / Name
+          <label className="block text-xs text-text-muted mb-1 flex items-center gap-1.5">
+            <Bot size={13} className="text-signal" />
+            Assistant name
           </label>
           <input
             type="text"
             value={assistantName}
             onChange={(e) => setAssistantName(e.target.value)}
-            placeholder="e.g. JARVIS"
-            className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-neon/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 font-mono outline-none transition-all shadow-inner"
+            placeholder="Jarvis"
+            className="w-full bg-surface border border-surface-border focus:border-signal/60 rounded-lg px-3.5 py-2 text-sm text-text-bright outline-none transition-colors"
             required
           />
         </div>
 
         <div>
-          <label className="block text-xs font-mono text-zinc-300 mb-1.5 flex items-center gap-1.5">
-            <User size={13} className="text-cyan-neon" />
-            Operator Preferred Name / Title
+          <label className="block text-xs text-text-muted mb-1 flex items-center gap-1.5">
+            <User size={13} className="text-signal" />
+            How Jarvis should address you
           </label>
           <input
             type="text"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
-            placeholder="e.g. Sir, Tony, Commander..."
-            className="w-full bg-white/[0.03] border border-white/10 focus:border-cyan-neon/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 font-mono outline-none transition-all shadow-inner"
+            placeholder="Sir, Alex, etc."
+            className="w-full bg-surface border border-surface-border focus:border-signal/60 rounded-lg px-3.5 py-2 text-sm text-text-bright outline-none transition-colors"
             required
           />
         </div>
 
         <button
           type="submit"
-          className="w-full mt-4 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-obsidian-950 font-display font-bold text-sm tracking-wider uppercase transition-all shadow-neon-cyan"
+          className="w-full mt-3 py-2.5 px-4 rounded-lg bg-signal hover:bg-signal-hover text-white font-medium text-sm transition-colors"
         >
-          <span>Initialize Intelligence Core</span>
-          <ArrowRight size={16} />
+          Continue
         </button>
       </form>
     </div>

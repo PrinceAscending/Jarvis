@@ -55,11 +55,7 @@ export function App() {
   }, [setFirstRunCompleted, setShowSetupWizard, setUpdateAvailable, setUpdateInfo, setActiveProvider]);
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-obsidian-950 text-zinc-100 overflow-hidden relative font-sans select-none">
-      {/* Dynamic Ambient Background Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-
+    <div className="w-screen h-screen flex flex-col bg-void text-text overflow-hidden relative font-sans select-none">
       {/* Global Toast Notification Container */}
       <ToastProvider />
 
@@ -68,19 +64,19 @@ export function App() {
         <SetupWizard onComplete={() => setShowSetupWizard(false)} />
       )}
 
-      {/* Custom Windows 11 Header */}
+      {/* Clean Desktop Header */}
       <WindowHeader />
 
-      {/* Proactive Intelligence Floating Notification Banner */}
+      {/* Proactive Intelligence Banner */}
       {proactiveAlert && (
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 z-40 max-w-lg w-full px-4 animate-in fade-in slide-in-from-top-4 duration-300">
-          <div className="glass-panel-glow p-3.5 rounded-xl border-cyan-neon/40 shadow-neon-cyan flex items-start gap-3 bg-obsidian-900/95">
-            <AlertCircle className="text-cyan-neon shrink-0 mt-0.5" size={18} />
+        <div className="absolute top-11 left-1/2 -translate-x-1/2 z-40 max-w-lg w-full px-4 animate-fade-in">
+          <div className="p-3.5 rounded-xl border border-signal/30 shadow-elevated flex items-start gap-3 bg-surface-elevated">
+            <AlertCircle className="text-signal shrink-0 mt-0.5" size={17} />
             <div className="flex-1 overflow-hidden font-sans">
-              <div className="text-xs font-display font-semibold text-zinc-100">
+              <div className="text-xs font-medium text-text-bright">
                 {proactiveAlert.title}
               </div>
-              <div className="text-xs text-zinc-300 mt-0.5">
+              <div className="text-xs text-text-muted mt-0.5">
                 {proactiveAlert.message}
               </div>
               {proactiveAlert.action_tool && (
@@ -89,15 +85,15 @@ export function App() {
                     sendPrompt(`Execute ${proactiveAlert.action_tool}`);
                     setProactiveAlert(null);
                   }}
-                  className="mt-2 px-3 py-1 rounded bg-cyan-500 text-obsidian-950 font-mono text-[11px] font-semibold hover:bg-cyan-400 transition-all shadow-neon-cyan"
+                  className="mt-2 px-3 py-1 rounded-md bg-signal text-white text-[11px] font-medium hover:bg-signal-hover transition-colors"
                 >
-                  Optimize Now
+                  Run action
                 </button>
               )}
             </div>
             <button
               onClick={() => setProactiveAlert(null)}
-              className="p-1 text-zinc-400 hover:text-zinc-200"
+              className="p-1 text-text-muted hover:text-text-bright transition-colors"
             >
               <X size={14} />
             </button>
@@ -110,8 +106,8 @@ export function App() {
         {/* Navigation Sidebar */}
         <NavigationSidebar />
 
-        {/* Dynamic View Panel with Smooth Tab Transition */}
-        <main key={activeTab} className="flex-1 h-full flex flex-col overflow-hidden relative animate-fade-slide-in">
+        {/* Dynamic View Panel with Clean Fade Transition */}
+        <main key={activeTab} className="flex-1 h-full flex flex-col overflow-hidden relative animate-fade-in bg-void">
           {activeTab === 'chat' && (
             <ChatContainer
               onSendMessage={(text) => sendPrompt(text)}

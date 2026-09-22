@@ -4,7 +4,7 @@
 #define MyAppName "JARVIS AI Assistant"
 #define MyAppVersion "4.2.0"
 #define MyAppPublisher "JARVIS Systems"
-#define MyAppURL "https://github.com/jarvis-assistant"
+#define MyAppURL "https://github.com/PrinceAscending/Jarvis"
 #define MyAppExeName "JarvisApp.exe"
 
 [Setup]

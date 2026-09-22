@@ -23,28 +23,36 @@ interface WorkflowCard {
 
 const WORKFLOWS: WorkflowCard[] = [
   {
+    id: 'system_doctor',
+    title: 'System Doctor & Auto-Repair',
+    description: 'Run deep diagnostic checks across hardware, SQLite, audio, and Ollama with automated safe repairs.',
+    icon: Layers,
+    tool: 'run_diagnostics',
+    args: { auto_repair: true },
+  },
+  {
+    id: 'screen_ocr',
+    title: 'Windows 11 Screen OCR & Vision',
+    description: 'Direct3D hardware-accelerated screen reading to extract visible text, buttons, and alert messages.',
+    icon: Camera,
+    tool: 'inspect_screen',
+    args: { focus_area: 'fullscreen' },
+  },
+  {
+    id: 'list_windows',
+    title: 'List Active Windows',
+    description: 'Audit all visible application windows on the desktop with process IDs and coordinates.',
+    icon: Layers,
+    tool: 'list_windows',
+    args: { include_minimized: false },
+  },
+  {
     id: 'downloads_organizer',
     title: 'Organize Downloads folder',
     description: 'Automatically sort downloads into clean subfolders for Documents, Media, Archives, and Installers.',
     icon: FolderSync,
     tool: 'organize_folder',
     args: { folder_path: '~/Downloads', dry_run: false },
-  },
-  {
-    id: 'system_health',
-    title: 'Run system diagnostics',
-    description: 'Query processor metrics, RAM allocation, and top running background processes.',
-    icon: Layers,
-    tool: 'get_system_stats',
-    args: {},
-  },
-  {
-    id: 'screen_capture',
-    title: 'Capture screenshot',
-    description: 'Take a high-resolution snapshot of your primary display and save to artifacts.',
-    icon: Camera,
-    tool: 'take_screenshot',
-    args: { save_to_disk: true },
   },
   {
     id: 'lock_station',

@@ -27,6 +27,19 @@ from tools.windows_control import (
     LockWorkstationTool,
     VolumeControlTool,
 )
+from tools.windows_manager import (
+    ListWindowsTool,
+    GetActiveWindowTool,
+    FocusWindowTool,
+    SetWindowStateTool,
+)
+from tools.screen_vision import (
+    InspectScreenTool,
+    LocateElementTool,
+    ClickElementTool,
+)
+from core.screen_memory import QueryScreenMemoryTool
+from core.diagnostics import RunDiagnosticsTool
 from tools.code_exec import ExecutePythonCodeTool
 from ai.base import ToolDefinition
 
@@ -73,6 +86,18 @@ class ToolRegistry:
             MinimizeAllWindowsTool(),
             LockWorkstationTool(),
             VolumeControlTool(),
+            # Window management
+            ListWindowsTool(),
+            GetActiveWindowTool(),
+            FocusWindowTool(),
+            SetWindowStateTool(),
+            # Screen vision & OCR
+            InspectScreenTool(),
+            LocateElementTool(),
+            ClickElementTool(),
+            QueryScreenMemoryTool(),
+            # System Doctor
+            RunDiagnosticsTool(),
             # Clipboard
             GetClipboardTool(),
             SetClipboardTool(),

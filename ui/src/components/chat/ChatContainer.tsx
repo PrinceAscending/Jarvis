@@ -6,6 +6,7 @@ import {
   Square,
   Wrench,
   Trash2,
+  Eye,
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { AudioVisualizerOrb } from '@/components/audio/AudioVisualizerOrb';
@@ -70,9 +71,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   };
 
   const SUGGESTIONS = [
-    'How is my system performing?',
+    'What is on my screen right now?',
+    'Run System Doctor diagnostics',
+    'Audit my GPU VRAM for local AI',
+    'List all open application windows',
     'Organize my Downloads folder',
-    'Summarize recent technology news',
   ];
 
   const greetingTime = (() => {
@@ -197,6 +200,16 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             className="p-2 text-text-muted hover:text-text-bright hover:bg-surface rounded-lg transition-colors shrink-0 mb-0.5"
           >
             <Trash2 size={15} />
+          </button>
+
+          {/* Screen Vision OCR Button */}
+          <button
+            type="button"
+            onClick={() => onSendMessage("Inspect my screen with Windows OCR and tell me what you see.")}
+            title="Inspect screen (Windows 11 OCR)"
+            className="p-2 text-text-muted hover:text-signal hover:bg-surface rounded-lg transition-colors shrink-0 mb-0.5"
+          >
+            <Eye size={15} />
           </button>
 
           {/* Multi-line Auto-expanding Textarea */}

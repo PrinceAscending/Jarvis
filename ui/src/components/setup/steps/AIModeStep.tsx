@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Server, Cloud, CheckCircle2, ArrowRight, ArrowLeft, RefreshCw, AlertCircle } from 'lucide-react';
+import { Server, Cloud, CheckCircle2, ArrowRight, ArrowLeft, RefreshCw, AlertCircle, Sparkles, Zap, Cpu } from 'lucide-react';
 
 interface AIModeStepProps {
   mode: 'local' | 'online';
@@ -8,6 +8,21 @@ interface AIModeStepProps {
   setSelectedProvider: (provider: string) => void;
   onNext: () => void;
   onBack: () => void;
+}
+
+interface HardwareAudit {
+  gpus: Array<{ name: string; vram_gb: number; is_dedicated: boolean }>;
+  best_vram_gb: number;
+  ram: { total_gb: number; available_gb: number };
+  recommended_model: string;
+  evaluations: Array<{
+    model: string;
+    grade: string;
+    label: string;
+    color: string;
+    reason: string;
+    speed_estimate: string;
+  }>;
 }
 
 export const AIModeStep: React.FC<AIModeStepProps> = ({
@@ -21,6 +36,7 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
   const [ollamaDetected, setOllamaDetected] = useState<boolean | null>(null);
   const [ollamaModels, setOllamaModels] = useState<any[]>([]);
   const [checking, setChecking] = useState(false);
+  const [hwAudit, setHwAudit] = useState<HardwareAudit | null>(null);
 
   const checkOllama = async () => {
     setChecking(true);
@@ -29,6 +45,13 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
       const data = await res.json();
       setOllamaDetected(data.running);
       setOllamaModels(data.models || []);
+
+      // Also fetch Hardware Audit
+      const hwRes = await fetch('http://127.0.0.1:8765/api/hardware/audit');
+      if (hwRes.ok) {
+        const hwData = await hwRes.json();
+        setHwAudit(hwData);
+      }
     } catch {
       setOllamaDetected(false);
     } finally {
@@ -48,6 +71,8 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
       setSelectedProvider('gemini');
     }
   };
+
+  const dedicatedGpu = hwAudit?.gpus.find((g) => g.is_dedicated) || hwAudit?.gpus[0];
 
   return (
     <div className="flex flex-col max-w-xl mx-auto space-y-5 animate-fade-in">
@@ -163,6 +188,46 @@ export const AIModeStep: React.FC<AIModeStepProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Hardware Fit Preview for Local Mode */}
+      {mode === 'local' && hwAudit && (
+        <div className="p-3.5 rounded-xl bg-surface border border-surface-border space-y-2 animate-fade-in">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-text-bright font-medium flex items-center gap-1.5">
+              <Cpu size={14} className="text-signal" />
+              Hardware Compatibility Audit
+            </span>
+            <span className="text-text-muted text-[11px]">
+              GPU: <span className="text-warm font-mono">{dedicatedGpu?.name || 'Integrated'}</span> ({hwAudit.best_vram_gb} GB VRAM)
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            {hwAudit.evaluations.slice(0, 4).map((e) => (
+              <div key={e.model} className="p-2 rounded bg-surface-well border border-surface-border/60 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono font-semibold text-text-bright">{e.model}</span>
+                  <span
+                    className={`text-[9px] px-1.5 py-0.2 rounded ${
+                      e.grade === 'excellent'
+                        ? 'bg-emerald-500/15 text-emerald-400'
+                        : e.grade === 'good'
+                        ? 'bg-blue-500/15 text-blue-400'
+                        : 'bg-amber-500/15 text-amber-400'
+                    }`}
+                  >
+                    {e.label}
+                  </span>
+                </div>
+                <div className="text-[10px] text-text-muted mt-1 flex items-center gap-1">
+                  <Zap size={9} className="text-warm" />
+                  {e.speed_estimate}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Online Provider Selection */}
       {mode === 'online' && (

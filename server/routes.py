@@ -14,13 +14,26 @@ from voice.tts import tts_engine
 from voice.pipeline import voice_pipeline
 from core.updater import update_manager
 from core.uninstaller import uninstall_manager
+from core.diagnostics import system_doctor
+from core.hardware_grader import hardware_grader
+from core.learning import learning_engine
+from core.screen_memory import screen_memory
 from security.credentials import CredentialVault
 import psutil
+from pathlib import Path
+import tempfile
+import time
+import base64
+import io
 
 router = APIRouter(prefix="/api")
 
 
 # Request models
+class RepairRequest(BaseModel):
+    check_id: str
+
+
 class ExecuteToolRequest(BaseModel):
     name: str
     arguments: Dict[str, Any] = {}
@@ -401,4 +414,94 @@ async def apply_update(background_tasks: BackgroundTasks):
 
     background_tasks.add_task(exit_app)
     return {"status": "launched", "message": "Installer launched. Terminating JARVIS."}
+
+
+# ==========================================
+# System Doctor Diagnostics & Auto-Repair Endpoints
+# ==========================================
+
+@router.get("/diagnostics/run")
+async def run_diagnostics():
+    """Run full system health checks across AI, Windows, and hardware."""
+    return system_doctor.run_all_checks()
+
+
+@router.post("/diagnostics/repair")
+async def repair_diagnostic_check(payload: RepairRequest):
+    """Attempt safe, targeted auto-repair on an identified failure."""
+    res = system_doctor.repair_check(payload.check_id)
+    if not res.get("success"):
+        raise HTTPException(status_code=400, detail=res.get("error", "Auto-repair failed."))
+    return res
+
+
+# ==========================================
+# Hardware Fit Grading Endpoints
+# ==========================================
+
+@router.get("/hardware/audit")
+async def get_hardware_audit():
+    """Query dedicated GPU VRAM, RAM, and grade all popular Ollama models."""
+    return hardware_grader.audit_all()
+
+
+@router.get("/hardware/grade/{model_name:path}")
+async def get_model_grade(model_name: str):
+    """Grade a specific model's performance fit on this machine."""
+    return hardware_grader.grade_model(model_name)
+
+
+# ==========================================
+# Screen Vision & Memory Endpoints
+# ==========================================
+
+@router.get("/screen/ocr")
+async def get_screen_ocr():
+    """Run native Windows 11 OCR on current screen and return extracted text and preview."""
+    import pyautogui
+    from tools.screen_vision import run_ocr_on_file
+    screenshot = pyautogui.screenshot()
+    temp_img = Path(tempfile.gettempdir()) / f"jarvis_route_ocr_{int(time.time()*1000)}.png"
+    screenshot.save(temp_img, format="PNG")
+    try:
+        ocr_data = run_ocr_on_file(temp_img)
+    finally:
+        temp_img.unlink(missing_ok=True)
+
+    # Generate small base64 thumbnail
+    buffer = io.BytesIO()
+    thumb = screenshot.resize((screenshot.width // 4, screenshot.height // 4))
+    thumb.save(buffer, format="JPEG", quality=65)
+    b64_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    return {
+        "ocr": ocr_data,
+        "thumbnail": f"data:image/jpeg;base64,{b64_str}",
+        "resolution": f"{screenshot.width}x{screenshot.height}",
+    }
+
+
+@router.get("/screen/memory")
+async def get_screen_memory(limit: int = 5):
+    """Retrieve recent screen memory snapshots."""
+    return {"snapshots": screen_memory.get_recent(limit=limit)}
+
+
+# ==========================================
+# Learning & Error Reflection Endpoints
+# ==========================================
+
+@router.get("/learning/mistakes")
+async def get_learned_mistakes():
+    """Retrieve stored mistakes, root causes, and self-learned workarounds."""
+    records = learning_engine.store.get_all_records(limit=50)
+    return {"mistakes": records}
+
+
+@router.delete("/learning/mistakes/{signature:path}")
+async def delete_learned_mistake(signature: str):
+    """Clear or forget a learned workaround."""
+    deleted = learning_engine.store.delete_mistake(signature)
+    return {"deleted": deleted}
+
 

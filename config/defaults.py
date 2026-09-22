@@ -11,7 +11,9 @@ GITHUB_RELEASES_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/late
 # Default directories
 APP_DATA_DIR = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "JarvisAssistant"
 CONFIG_FILE = APP_DATA_DIR / "config.json"
+SETTINGS_PATH = CONFIG_FILE
 DATABASE_FILE = APP_DATA_DIR / "jarvis.db"
+DB_PATH = DATABASE_FILE
 MEMORY_DIR = APP_DATA_DIR / "memory"
 LOGS_DIR = APP_DATA_DIR / "logs"
 RECORDINGS_DIR = APP_DATA_DIR / "recordings"
